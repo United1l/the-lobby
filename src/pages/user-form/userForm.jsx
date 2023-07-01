@@ -31,14 +31,13 @@ const FormCheck = (props) => {
 		return <Layout title="Log in" btnText="Log in" question={question} link="Sign up" clickEvt={handleLogClick}/>;
 	}
 
-	return props.signUp? <SignUp />: <LogIn />;
+	return <BrowserRouter>props.signUp? <SignUp />: <LogIn /></BrowserRouter>;
 }
 
 const Layout = (props) => {
 	const children = props.children;
 
-	return (
-		<BrowserRouter>	
+	return (	
 			<Box sx={{height:'100vh', width: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 				<Box sx={{height: '70%', width:'90%', padding: '0 0.5rem', 
 				display: 'flex', flexDirection: 'column', 
@@ -51,7 +50,6 @@ const Layout = (props) => {
 					<h4>{props.question}<Link to="/user-form" onClick={props.clickEvt}>{props.link}</Link></h4>
 				</Box>
 			</Box>
-		</BrowserRouter>
 		);
 }
 

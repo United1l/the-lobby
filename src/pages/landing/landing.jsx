@@ -4,9 +4,7 @@ import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 import { withErrorBoundary } from "../../components/withErrorBoundary.jsx";
 
-const toggle = (bool, fn) => {
-	fn(bool);
-}
+const toggle = (fn, bool) => fn(bool);
 
 const Landing = (props) => {
 //	const navigate = useNavigate();

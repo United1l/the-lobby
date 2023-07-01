@@ -1,27 +1,40 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { jest } from '@jest/globals';
 import { FormCheck } from '../pages/user-form/userForm.jsx';
 
 test('renders a sign up form or log in form component', () => {
 		 const sign = true;
-		 const fn = jest.fn();
 
 		 render(<FormCheck />);
 
 		 // ACT
-		 const title = screen.getByText("Sign up");
-		 const userName = screen.getByLabelText("Username");
-		 const email = screen.queryByLabelText("Email");
-		 const pass = screen.getByLabelText("Password");
-		 const signUpBtn = screen.queryByRole("Button", {name: 'Sign up'});
+
+		 const logInTxt = screen.getAllByText("Log in");
+		 const signUpTxt = screen.getAllByText("Sign up");
+		 const userName = screen.getAllByLabelText("Username");
+		 const email = screen.getByLabelText("Email");
+		 const pass = screen.getAllByLabelText("Password");
+		 const signUpBtn = screen.getByRole("button", {name: 'Sign up'});
+		 const logInBtn = screen.getByRole("button", {name: 'Log in'});
 
 		 // ASSERT
 
-		 expect(title).toBeInTheDocument();
-		 expect(userName).toBeInTheDocument();
-		 expect(email).toHaveTextContent("Sign up");
-		 expect(pass).toBeInTheDocument();
+		 for (let i=0; i < logInTxt.length; i++) {
+		 	expect(logInTxt[i]).toBeInTheDocument()
+		 }
+
+		 for (let i=0; i < signUpTxt.length; i++) {
+		 	expect(signUpTxt[i]).toBeInTheDocument()
+		 }
+
+		 for (let i=0; i < userName.length; i++) {
+		 	expect(userName[i]).toBeInTheDocument()
+		 }
+		 expect(email).toBeInTheDocument()
+		 
+		 for (let i=0; i < pass.length; i++) {
+		 	expect(pass[i]).toBeInTheDocument()
+		 }
 		 expect(signUpBtn).toHaveTextContent("Sign up");
 		 
 })
