@@ -1,4 +1,4 @@
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
@@ -31,7 +31,7 @@ const FormCheck = (props) => {
 		return <Layout title="Log in" btnText="Log in" question={question} link="Sign up" clickEvt={handleLogClick}/>;
 	}
 
-	return <BrowserRouter>props.signUp? <SignUp />: <LogIn /></BrowserRouter>;
+	return props.signUp? <SignUp />: <LogIn />;
 }
 
 const Layout = (props) => {

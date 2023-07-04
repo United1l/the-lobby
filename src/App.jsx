@@ -27,7 +27,8 @@ import { FormCheck } from "./pages/user-form/userForm.jsx";
 import { supabaseClient } from "./utility";
 
 function App() {
-  const [signUp, setSignUP] = useState(false);
+  const boolData = window.localStorage.getItem('boolData');
+  const [signUp, setSignUP] = useState(boolData);
 
   return (
     <BrowserRouter>
