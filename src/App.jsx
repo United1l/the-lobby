@@ -13,7 +13,7 @@ import {
 
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
-import routerProvider, {
+import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
@@ -24,6 +24,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import authProvider from "./authProvider";
 import { Landing } from "./pages/landing/landing.jsx";
 import { FormCheck } from "./pages/user-form/userForm.jsx";
+import { Preferences } from "./pages/preferences/preferences.jsx";
 import { supabaseClient } from "./utility";
 
 function App() {
@@ -32,10 +33,14 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Refine routerProvider={routerProvider}>
+      <Refine routerProvider={routerBindings}
+        dataProvider={supabaseClient}
+        liveProvider={supabaseClient}
+      >
         <Routes>
           <Route index element={<Landing setSignUP={setSignUP} />} />
-          <Route path="user-form" element={<FormCheck signUp={signUp} setSignUP={setSignUP} />} />
+          <Route path="user-form" element={<FormCheck signUp={signUp} setSignUP={setSignUP} supabase={supabaseClient} />} />
+          <Route path="preferences" element={<Preferences />} />
         </Routes>
       </Refine>
     </BrowserRouter>
