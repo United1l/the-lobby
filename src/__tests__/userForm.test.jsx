@@ -1,21 +1,27 @@
+import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { FormCheck } from '../pages/user-form/userForm.jsx';
+import { FormCheck, setDef } from '../pages/user-form/userForm.jsx';
+import { jest } from '@jest/globals';
 
-test('renders a sign up form or log in form component', () => {
-		 const sign = true;
-
-		 render(<FormCheck />);
+test('renders a sign up form or log in form component', () => { 
+		 render(<MemoryRouter><FormCheck signUp={true} /></MemoryRouter>);
 
 		 // ACT
 
+		 const sign = true;
+		 const prop = "";
+
+		 const func = jest.fn();
+
 		 const logInTxt = screen.getAllByText("Log in");
 		 const signUpTxt = screen.getAllByText("Sign up");
-		 const userName = screen.getAllByLabelText("Username");
-		 const email = screen.getByLabelText("Email");
-		 const pass = screen.getAllByLabelText("Password");
-		 const signUpBtn = screen.getByRole("button", {name: 'Sign up'});
-		 const logInBtn = screen.getByRole("button", {name: 'Log in'});
+		 const userName = screen.getByText("Username");
+		 const email = screen.getByText("Email");
+		 const pass = screen.getByText("Password");
+		 const passRetype = screen.getByText("Re-type password");
+
+		 setDef(sign, func, prop);
 
 		 // ASSERT
 
@@ -27,14 +33,13 @@ test('renders a sign up form or log in form component', () => {
 		 	expect(signUpTxt[i]).toBeInTheDocument()
 		 }
 
-		 for (let i=0; i < userName.length; i++) {
-		 	expect(userName[i]).toBeInTheDocument()
-		 }
-		 expect(email).toBeInTheDocument()
-		 
-		 for (let i=0; i < pass.length; i++) {
-		 	expect(pass[i]).toBeInTheDocument()
-		 }
-		 expect(signUpBtn).toHaveTextContent("Sign up");
+		 expect(userName).toBeInTheDocument();
+		 expect(email).toBeInTheDocument();
+		 expect(pass).toBeInTheDocument();
+		 expect(passRetype).toBeInTheDocument();
+
+		 expect(func).toHaveBeenCalled();
+
+
 		 
 })

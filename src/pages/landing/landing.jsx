@@ -1,4 +1,4 @@
-import { useNavigate, BrowserRouter as Router } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
@@ -26,7 +26,7 @@ const Landing = (props) => {
 	}
 
 	return(
-		<Grid container height="100vh">
+		<Grid container height="95vh">
 				<Grid item xs={12}>
 					<Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
 						<Button variant="outlined" sx={marginSides} onClick={handleSignClick}>

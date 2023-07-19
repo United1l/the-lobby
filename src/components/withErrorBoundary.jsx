@@ -23,11 +23,7 @@ const withErrorBoundary = (WrappedComponent) => {
 
 		}, []);
 
-		if (hasError) {
-			console.log(errorInfo)
-		}
-
-		return <WrappedComponent {...props} />;
+		return (hasError && console.log(errorInfo));
 	}
 }
 
