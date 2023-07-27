@@ -1,13 +1,11 @@
-import { useState } from "react";
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
+import { useState, useEffect } from "react";
+import { Authenticated, GitHubBanner, Refine, } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
   ErrorComponent,
   notificationProvider,
   RefineSnackbarProvider,
-  ThemedLayoutV2,
-  ThemedTitleV2,
 } from "@refinedev/mui";
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -25,13 +23,15 @@ import { Landing } from "./pages/landing/landing.jsx";
 import { FormCheck } from "./pages/user-form/userForm.jsx";
 import { Preferences } from "./pages/preferences/preferences.jsx";
 import { Recommended } from "./pages/recommended/recommended.jsx";
-import { ArrayContextProvider } from "./components/arrayContext.jsx";
+import { Dashboard } from "./pages/dashboard/dashboard.jsx";
+import { useArray, useArrayDispatch, ArrayContextProvider } from "./components/arrayContext.jsx";
+import { WithErrorBoundary } from "./components/withErrorBoundary.jsx";
 import { supabaseClient } from "./utility";
 
 function App() {
   const boolData = window.localStorage.getItem('boolData');
   const [signUp, setSignUP] = useState(boolData);
-
+  
   return (
     <RefineSnackbarProvider>
       <BrowserRouter>
@@ -49,17 +49,21 @@ function App() {
           authProvider={authProvider}
         >
           <ArrayContextProvider>
-            <Routes>
-            <Route index element={<Landing setSignUP={setSignUP} />} />
-            <Route path="user-form" element={<FormCheck signUp={signUp} setSignUP={setSignUP} />} />
-            <Route path="preferences" element={<Preferences />} />
-            <Route path="recommended" element={<Recommended  />} />
-          </Routes>
+            <WithErrorBoundary>
+              <Routes>
+                <Route index element={<Landing setSignUP={setSignUP} />} />
+                <Route path="user-form" element={<FormCheck signUp={signUp} setSignUP={setSignUP} />} />
+                <Route path="preferences" element={<Preferences />} />
+                <Route path="recommended" element={<Recommended />} />
+                <Route path="dashboard" element={<Dashboard />} />
+              </Routes>
+            </WithErrorBoundary>
           </ArrayContextProvider>
         </Refine>
       </BrowserRouter>
     </RefineSnackbarProvider>
   );
 }
+
 
 export default App;

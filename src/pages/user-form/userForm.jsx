@@ -4,7 +4,6 @@ import { useCreate, useOne } from "@refinedev/core";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { withErrorBoundary } from "../../components/withErrorBoundary.jsx";
 import { toggle } from "../landing/landing.jsx";
 
 const FormCheck = props => {
@@ -221,7 +220,5 @@ const setDef = (bool, fn, error) => {
 		error: bool? false: true,
 	})
 }
-
-const errorBoundary = withErrorBoundary(FormCheck);
 
 export { FormCheck, setDef };

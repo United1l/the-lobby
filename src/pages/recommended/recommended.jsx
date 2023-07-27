@@ -5,32 +5,26 @@ import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 import { AvatarDisp } from "../../components/avatarDisplay.jsx";
-import { useArray, useArrayDispatch } from "../../components/arrayContext.jsx";
+import { useArray } from "../../components/arrayContext.jsx";
+import { useId, useSetId } from "../../components/userAccountContext.jsx";
 
 
 
 const Recommended = props => {
 	const [ids, setIds] = useState([1,2,3]);
-	const [id, setId] = useState(1);
+	const id = useId();
+	const setId = useSetId();
 	const [loggedUser, setLoggedUser] = useState("");
-	const navigate = useNavigate();
 	const array = useArray();
+	const navigate = useNavigate();
+	let clubs = [];
 
-	const { data, isLoading, isError } = useMany({
-			resource: "GAME_CLUBS",
-			ids,
-			liveMode: "auto",
-	});
-
-	const clubs = data?.data ?? [];
-	console.log(clubs);
-
-	useEffect(() => {	
+	useEffect(() => {
 		const fetchClubs = setInterval(() => {
-			const newIds = ids.map(id => id + 3);
-			if (clubs.length > 2) setIds(newIds);
-		} ,6000);
-
+      		const newIds = ids.map(id => id + 3);
+      		if (clubs.length > 2) setIds(newIds);
+   	 	} ,6000);
+    
 		const loggedInUser = localStorage.getItem('user');
 
 		if (loggedInUser) {
@@ -39,33 +33,46 @@ const Recommended = props => {
 		}
 
 		return () => {
-			clearInterval(fetchClubs)
-		}
+      		clearInterval(fetchClubs)
+    	}
 	}, []);
+
+	const { data, isLoading, isError } = useMany({
+      resource: "GAME_CLUBS",
+      ids,
+      liveMode: "auto",
+  	});
+
+  	if (isLoading) {
+    	return <div>Loading...</div>
+  	}
+
+  	if (isError) {
+    	return <div>Something went wrong</div>
+  	}
+
+  	clubs = data?.data ?? [];
 
 	// check prefArr, gen clubs names that match prefArr items
 	let clubNamesObj = new Set();
 	let genres = [];
 
-	const clubData = clubs.map(({ club_name, club_genres }) => {
-		genres = [...genres, club_genres];
+	if (clubs.length > 0) { 
 
-		genres.map(genre => {
-			let checkPref = array.preferences.every(pref => {
-				genre.includes(pref);
+		const clubData = clubs.map(({ club_name, club_genres }) => {
+			genres = [...genres, club_genres];
+
+			genres.map(genre => {
+				let checkPref = array.preferences.every(pref => {
+					genre.includes(pref);
+				});
+
+				checkPref? clubNamesObj.add(club_name): clubNamesObj.delete(club_name);
 			});
-
-			checkPref? clubNamesObj.add(club_name): clubNamesObj.delete(club_name);
 		});
-	});
-
-	if (isLoading) {
-		return <div>Loading...</div>
 	}
 
-	if (isError) {
-		return <div>Something went wrong</div>
-	}
+	
 
 	const clubNamesArr = [...clubNamesObj];
 
@@ -92,12 +99,14 @@ const Recommended = props => {
 
 	const updateUser = user => {
 		if (loggedUser && user == loggedUser) {
-			const { mutate } = useUpdate({
+			const { mutate } = useUpdate();
+
+			mutate({
 				resource: 'USER_ACCOUNTS',
 				values: {
 					game_club: array.userClubs,
 				},
-				invalidates: ["list", "many", "details"],
+				id: id,
 			});
 		} else {
 			setId(id + 1);
@@ -109,13 +118,16 @@ const Recommended = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		getUser();		
-		updateUser(user_name);
-		
-		// Go to dashboard page
-		navigate('/dashboard');
-		
+		if (array.userClubs.length != 0) {
+			getUser();		
+			updateUser(user_name);
+
+			// Go to dashboard page
+			navigate('/dashboard');
+		} else navigate('/dashboard');	
 	}
+
+	
 
 	return  (
 		<Box sx={{height: '95vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>

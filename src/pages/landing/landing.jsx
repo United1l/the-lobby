@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { withErrorBoundary } from "../../components/withErrorBoundary.jsx";
 
 const toggle = (bool, fn) => {
 	const boolData = window.localStorage.setItem('boolData', bool);
@@ -44,7 +43,5 @@ const Landing = (props) => {
 			</Grid>
 	);
 }
-
-const errorBoundary = withErrorBoundary(Landing);
 
 export { Landing, toggle };
