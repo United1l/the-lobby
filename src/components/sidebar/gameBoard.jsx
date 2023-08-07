@@ -8,12 +8,12 @@ const GameBoard = props => {
 	const userAcc = props.userAcc;
 	const userGames = ["Apex legends", "GTA V", "Valorant"];
 	const isBoard = true;
-	const title1 = <h3>Currently playing</h3>;
+	const title2 = <h3>Currently playing</h3>;
 
 	return (
 		<Box sx={{height: '50%', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-			{bigScreen? <BoxCont title1={title1} isBoard={isBoard}>{userGames}</BoxCont> : 
-				<MenuCont title1={title1}>{userGames}</MenuCont>}
+			{bigScreen? <BoxCont title2={title2} isBoard={isBoard}>{userGames}</BoxCont> : 
+				<MenuCont title2={title2} isBoard={isBoard}>{userGames}</MenuCont>}
 		</Box>
 		);
 }

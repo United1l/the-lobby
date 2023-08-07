@@ -12,7 +12,6 @@ import { AccountSettings } from "./accountSettings.jsx";
 
 const Header = props => {
 	const bigScreen = props.bigScreen;
-	const clubs = props.clubs;
 	const menu = props.menu;
 	const setMenu = props.setMenu;
 	const darkMode = props.darkMode;
@@ -37,10 +36,10 @@ const Header = props => {
 
 	let themeSwitch = dark;
 
-	const handleClick = e => {
+	const openMenu = e => {
 		e.preventDefault();
 
-		setMenu(true);
+		setMenu(!menu);
 	}
 
 	const handleThemeSwitch = e => {
@@ -52,13 +51,13 @@ const Header = props => {
 	const openSearchB = e => {
 		e.preventDefault();
 
-		setSearch(true);
+		setSearch(!search);
 	}
 
 	const openAccSett = e => {
 		e.preventDefault();
 
-		setAccount(true);
+		setAccount(!account);
 	}
 
 	if (darkMode) {
@@ -91,11 +90,10 @@ const Header = props => {
 	return (
 		<Box sx={{height: '5%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', borderBottom: '1px solid gray'}}>
 			<Box sx={{width: '30%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={handleClick} bigScreen={bigScreen} >
+				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openMenu} bigScreen={bigScreen} >
 					<MenuIcon color={iconsTheme.iconBg} fontSize="small" />
 				</IconsWrapper>
 			</Box>
-			<h3>{/*Some sidebar item title*/}</h3>
 			<Box sx={{position: 'absolute', right: '2%', width: '30%', display: 'flex', alignItems: 'center', 
 				justifyContent: 'space-evenly'}}>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openSearchB}>{searchIcon}</IconsWrapper>
@@ -115,7 +113,7 @@ const Header = props => {
 				</Box>
 			</Box>
 			<SearchBox display={displaySearch} setSearch={setSearch} theme={theme} 
-				searchIcon={searchIcon} clubs={clubs} />
+				searchIcon={searchIcon} />
 			<AccountSettings display={displayAccount} userAvatar={userAvatar} setAccount={setAccount}
 					theme={theme} bigScreen={bigScreen} />					
 		</Box>

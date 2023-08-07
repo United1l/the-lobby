@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMany, useOne, useUpdate } from "@refinedev/core";
+import { useUpdate } from "@refinedev/core";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 import { AvatarDisp } from "../../components/avatarDisplay.jsx";
 import { useArray } from "../../components/arrayContext.jsx";
-import { useId, useSetId } from "../../components/userAccountContext.jsx";
-
-
+import { GetGroupData } from "../../components/dataRequest.jsx";
 
 const Recommended = props => {
 	const [ids, setIds] = useState([1,2,3]);
-	const id = useId();
-	const setId = useSetId();
+	let numArr = [];
+	for (let i = 0; i < 50; i++) {
+		let index = i + 1;
+		numArr.push(index);
+	}
+
+	const [uids, setUIds] = useState(numArr);
 	const [loggedUser, setLoggedUser] = useState("");
 	const array = useArray();
 	const navigate = useNavigate();
+	const { mutate } = useUpdate();
 	let clubs = [];
 
 	useEffect(() => {
@@ -28,8 +32,7 @@ const Recommended = props => {
 		const loggedInUser = localStorage.getItem('user');
 
 		if (loggedInUser) {
-			const foundUser = JSON.parse(loggedInUser);
-			setLoggedUser(foundUser);
+			setLoggedUser(loggedInUser);
 		}
 
 		return () => {
@@ -37,29 +40,16 @@ const Recommended = props => {
     	}
 	}, []);
 
-	const { data, isLoading, isError } = useMany({
-      resource: "GAME_CLUBS",
-      ids,
-      liveMode: "auto",
-  	});
+	const users = GetGroupData("USER_ACCOUNTS", uids);
 
-  	if (isLoading) {
-    	return <div>Loading...</div>
-  	}
-
-  	if (isError) {
-    	return <div>Something went wrong</div>
-  	}
-
-  	clubs = data?.data ?? [];
+	clubs = GetGroupData("GAME_CLUBS", ids);
 
 	// check prefArr, gen clubs names that match prefArr items
 	let clubNamesObj = new Set();
 	let genres = [];
 
-	if (clubs.length > 0) { 
-
-		const clubData = clubs.map(({ club_name, club_genres }) => {
+	if (clubs) { 
+		const clubData = clubs.map(({ id, club_name, club_genres }) => {
 			genres = [...genres, club_genres];
 
 			genres.map(genre => {
@@ -76,55 +66,62 @@ const Recommended = props => {
 
 	const clubNamesArr = [...clubNamesObj];
 
-
-	const getUser = () => {
-		const { data, isLoading, isError} = useOne({
-			resource: "USER_ACCOUNTS",
-			id,
-		});
-
-		const user = data?.data;
-
-		if (isLoading) {
-			return <div>Loading...</div>
-		}
-
-		if (isError) {
-			return <div>Something went wrong</div>
-		}
-
-		const { user_name } = user;
-		return user_name;
-	}
-
-	const updateUser = user => {
-		if (loggedUser && user == loggedUser) {
-			const { mutate } = useUpdate();
-
-			mutate({
-				resource: 'USER_ACCOUNTS',
-				values: {
-					game_club: array.userClubs,
-				},
-				id: id,
-			});
-		} else {
-			setId(id + 1);
-			getUser();
-			updateUser(user);
-		}	
-	}
-
 	const handleSubmit = e => {
 		e.preventDefault();
 
 		if (array.userClubs.length != 0) {
-			getUser();		
-			updateUser(user_name);
+			users.forEach(data => {
+				const { id, user_name } = data;
+				if (loggedUser == user_name) {
+					mutate({
+						resource: "USER_ACCOUNTS",
+						values: {
+							game_club: array.userClubs,
+						},
+						id: id,
+					});
 
-			// Go to dashboard page
+					for (let i = 0; i < clubs.length; i++) {
+						for (let j = 0; j < array.userClubs.length; i++) {
+							const { id, club_name } = clubs[i];
+							const clubId = id;
+							if (array.userClubs[j] == club_name) {
+								let newMem = [];
+								newMem.push(loggedUser);
+								mutate({
+									resource: "GAME_CLUBS",
+									values: {
+										club_members: newMem,
+									},
+									id: clubId,
+								});
+							}
+						}
+					}
+
+					localStorage.setItem('id', id);
+
+					// Go to dashboard page
+					navigate('/dashboard');
+				} else {
+					const newIds = uids.map(id => id + 50);
+					setUIds(newIds);
+				}
+			});
+
+		} else {
+			users.forEach(data => {
+				const { id, user_name } = data;
+				if (loggedUser == user_name) {
+					localStorage.setItem('id', id);					
+				} else {
+					const newIds = uids.map(id => id + 50);
+					setUIds(newIds);
+				}
+			});
+
 			navigate('/dashboard');
-		} else navigate('/dashboard');	
+		}	
 	}
 
 	
@@ -160,6 +157,5 @@ const Clubs = props => {
 		</Grid>
 		);
 }
-
 
 export { Recommended }
