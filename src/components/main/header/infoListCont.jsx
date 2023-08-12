@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUpdate } from "@refinedev/core";
-import { Box, Button, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, FormControlLabel, Checkbox } from "@mui/material";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";
 import { BoxCont } from "./boxCont.jsx";

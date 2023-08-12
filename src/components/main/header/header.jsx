@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";
 
 const Header = props => {

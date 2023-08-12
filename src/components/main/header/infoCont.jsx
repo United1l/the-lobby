@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUpdate } from "@refinedev/core";
-import { Box, Button, TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";

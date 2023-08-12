@@ -10,14 +10,7 @@ import { GetGroupData } from "../../components/dataRequest.jsx";
 
 const Recommended = props => {
 	const [ids, setIds] = useState([1,2,3]);
-	let numArr = [];
-	for (let i = 0; i < 50; i++) {
-		let index = i + 1;
-		numArr.push(index);
-	}
-
-	const [uids, setUIds] = useState(numArr);
-	const [loggedUser, setLoggedUser] = useState("");
+	const [loggedUserID, setLoggedUserId] = useState(0);
 	const array = useArray();
 	const navigate = useNavigate();
 	const { mutate } = useUpdate();
@@ -29,18 +22,16 @@ const Recommended = props => {
       		if (clubs.length > 2) setIds(newIds);
    	 	} ,6000);
     
-		const loggedInUser = localStorage.getItem('user');
+		const userId = sessionStorage.getItem('userId');
 
-		if (loggedInUser) {
-			setLoggedUser(loggedInUser);
+		if (userId) {
+			setLoggedUserId(userId);
 		}
 
 		return () => {
       		clearInterval(fetchClubs)
     	}
 	}, []);
-
-	const users = GetGroupData("USER_ACCOUNTS", uids);
 
 	clubs = GetGroupData("GAME_CLUBS", ids);
 
@@ -69,57 +60,37 @@ const Recommended = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		if (array.userClubs.length != 0) {
-			users.forEach(data => {
-				const { id, user_name } = data;
-				if (loggedUser == user_name) {
-					mutate({
-						resource: "USER_ACCOUNTS",
-						values: {
-							game_club: array.userClubs,
-						},
-						id: id,
-					});
-
-					for (let i = 0; i < clubs.length; i++) {
-						for (let j = 0; j < array.userClubs.length; i++) {
-							const { id, club_name } = clubs[i];
-							const clubId = id;
-							if (array.userClubs[j] == club_name) {
-								let newMem = [];
-								newMem.push(loggedUser);
-								mutate({
-									resource: "GAME_CLUBS",
-									values: {
-										club_members: newMem,
-									},
-									id: clubId,
-								});
-							}
-						}
-					}
-
-					localStorage.setItem('id', id);
-
-					// Go to dashboard page
-					navigate('/dashboard');
-				} else {
-					const newIds = uids.map(id => id + 50);
-					setUIds(newIds);
-				}
+		if (array.userClubs.length != 0 && loggedUserID != 0) {
+			mutate({
+				resource: "USER_ACCOUNTS",
+				values: {
+					game_club: array.userClubs,
+				},
+				id: loggedUserID,
 			});
+
+			for (let i = 0; i < clubs.length; i++) {
+				for (let j = 0; j < array.userClubs.length; i++) {
+					const { id, club_name } = clubs[i];
+					const clubId = id;
+					if (array.userClubs[j] == club_name) {
+						let newMem = [];
+						newMem.push(loggedUserID);
+						mutate({
+							resource: "GAME_CLUBS",
+							values: {
+								club_members: newMem,
+							},
+							id: clubId,
+						});
+					}
+				}
+			}
+
+			// Go to dashboard page
+			navigate('/dashboard');
 
 		} else {
-			users.forEach(data => {
-				const { id, user_name } = data;
-				if (loggedUser == user_name) {
-					localStorage.setItem('id', id);					
-				} else {
-					const newIds = uids.map(id => id + 50);
-					setUIds(newIds);
-				}
-			});
-
 			navigate('/dashboard');
 		}	
 	}

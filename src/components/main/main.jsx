@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { Recommended } from "./recommended.jsx";
 import { Chatroom } from "./chatroom.jsx";

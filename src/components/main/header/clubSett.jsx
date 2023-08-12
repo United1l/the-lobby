@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUpdate, useDelete } from "@refinedev/core";
-import { Box, Button, Grid, TextField, FormControlLabel, Checkbox } from "@mui/material";
+import { Box, TextField, Paper } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";
@@ -16,6 +16,8 @@ const ClubSett = props => {
 	const clubAdmin = clubInfo.club_admin;
 	const clubId = clubInfo.id;
 	const users = props.users;
+	const uids = props.uids;
+	const setUIds = props.uids;
 	const userAcc = props.userAcc;
 	const { id, user_name } = userAcc;
 	const userName = user_name;
@@ -71,7 +73,7 @@ const ClubSett = props => {
 						},
 						id,
 					});
-				}
+				} else setUIds(uids.map(uid => uid + 50));
 			});
 		});
 
@@ -85,10 +87,9 @@ const ClubSett = props => {
 	}
 
 	return (
-		<Box sx={{height: '77%', width: '60%', position: 'absolute', top: '11%', left: '20%', 
+		<Paper sx={{height: '77%', width: '60%', position: 'absolute', top: '11%', left: '20%', 
 			display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-			alignItems: 'center', borderRadius: '10px', 
-			border: '1px solid gray', backgroundColor: "white"}}>
+			alignItems: 'center',}} elevation={4}>
 			<Box sx={{height: '20%', width: '100%', backgroundColor: 'gray',}}>
 				{/*image-box*/}
 			</Box>
@@ -105,7 +106,7 @@ const ClubSett = props => {
 			<p style={{margin: '0', cursor: 'pointer'}} onClick={handleLeave}>LEAVE CLUB</p>
 			{isAd && <p style={{margin: '0', cursor: 'pointer', color: 'red'}} onClick={handleDelete}>
 			Delete CLUB</p>}		
-		</Box>
+		</Paper>
 		);
 }
 

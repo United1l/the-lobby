@@ -1,10 +1,9 @@
 import { AuthPage, ThemedTitleV2 } from "@refinedev/mui";
-import { TextField } from "@mui/material";
 
-const SignUp = () => {
+const ForgotPassword = () => {
 	return (
 		<AuthPage 
-			type="register"
+			type="forgotPassword"
 			title={
 				<ThemedTitleV2
 					collapsed={false}
@@ -15,4 +14,4 @@ const SignUp = () => {
 	);
 }
 
-export { SignUp }
+export { ForgotPassword };

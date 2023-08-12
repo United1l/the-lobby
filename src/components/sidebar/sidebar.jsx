@@ -1,6 +1,6 @@
 import { useState, useEffect, } from "react";
 import { useMany, useOne, useUpdate } from "@refinedev/core";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { ClubInfo } from "./clubInfo.jsx";
 import { GameBoard } from "./gameBoard.jsx";

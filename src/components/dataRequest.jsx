@@ -1,4 +1,4 @@
-import { useMany, useDelete, useUpdate, } from "@refinedev/core"; 
+import { useMany, useDelete, } from "@refinedev/core"; 
 
 const DeleteOne = (table, rowId) => {
 	const { mutate } = useDelete();

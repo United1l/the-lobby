@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
 import { useOne } from "@refinedev/core";
-import { Box, Button, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { Header } from "../../components/header/header.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { Main } from "../../components/main/main.jsx";
 import { ChatContextProvider, useOpenChat, useSetOpenChat } from "../../components/chatContext.jsx";
 
 const Dashboard = props => {
-	const [logData, setLogData] = useState({
-		name: "",
-		id: 1,
-	});
+	const [loggedId, setLogId] = useState(0);
 	const [menu, setMenu] = useState(false);
 	const [darkMode, setDarkMode] = useState(false);
 	const [matches, setMatches] = useState(
@@ -25,15 +22,10 @@ const Dashboard = props => {
 	let userAcc = null;
 
 	useEffect(() => {
-		const loggedInUser = localStorage.getItem('user');
-		const loggedId =  localStorage.getItem('id');
+		const loggedId =  localStorage.getItem('userId') || sessionStorage.getItem('userId');
 
-		if (loggedInUser && loggedId) {
-			setLogData({
-				...logData,
-				name: loggedInUser,
-				id: loggedId,
-			});
+		if (loggedId) {
+			setLogId(loggedId);
 		}
 
 		window.matchMedia("(min-width: 768px)").addEventListener('change', e => {
@@ -42,10 +34,10 @@ const Dashboard = props => {
 
 	}, []);
 
-	if (logData.name || logData.id) {
+	if (loggedId) {
 		const { data, isLoading, isError} = useOne({
 			resource: "USER_ACCOUNTS",
-			id: logData.id,
+			id: loggedId,
 		});
 
 		const user = data?.data;
@@ -60,9 +52,7 @@ const Dashboard = props => {
 
 		const { user_name } = user;
 		
-		if (logData.name == user_name) {
-			userAcc = user;
-		}
+		userAcc = user;
 	}
 
 	if (menu) display = 'flex';
@@ -83,7 +73,7 @@ const Dashboard = props => {
 				<Header menu={menu} setMenu={setMenu} darkMode={darkMode} setDarkMode={setDarkMode} 
 					bigScreen={matches} />
 				
-				<Sidebar loggedUser={logData.name} display={display} setMenu={setMenu} darkMode={darkMode}
+				<Sidebar loggedUser={user_name} display={display} setMenu={setMenu} darkMode={darkMode}
 				 menu={menu} bigScreen={matches} userAcc={userAcc} />
 				<Box sx={{height: '95%', width: '100%', position: 'relative'}}>
 					<Main darkMode={darkMode} bigScreen={matches} userAcc={userAcc} />

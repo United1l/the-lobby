@@ -1,5 +1,5 @@
 import { useState, useEffect, } from "react";
-import { Box, Button, Grid, InputAdornment, Avatar, Badge, Divider } from "@mui/material";
+import { Box, Avatar, Badge } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon  from "@mui/icons-material/Search";
 import DarkModeIcon  from "@mui/icons-material/DarkMode";
@@ -88,17 +88,19 @@ const Header = props => {
 
 
 	return (
-		<Box sx={{height: '5%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', borderBottom: '1px solid gray'}}>
-			<Box sx={{width: '30%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openMenu} bigScreen={bigScreen} >
+		<Box sx={{height: '5%', width: '100%', display: 'flex', borderBottom: '0.5px solid gray', 
+			 alignItems: 'center'}}>
+			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', 
+			 alignSelf: 'flex-start', ml: '1rem'}}>
+				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openMenu} bigScreen={bigScreen}>
 					<MenuIcon color={iconsTheme.iconBg} fontSize="small" />
 				</IconsWrapper>
 			</Box>
-			<Box sx={{position: 'absolute', right: '2%', width: '30%', display: 'flex', alignItems: 'center', 
+			<Box sx={{position: 'absolute', right: '10px', width: '30%', display: 'flex', alignItems: 'center', 
 				justifyContent: 'space-evenly'}}>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openSearchB}>{searchIcon}</IconsWrapper>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={handleThemeSwitch}>{themeSwitch}</IconsWrapper>
-				<Box sx={{width: '35%', height: '100%', display: 'flex', 
+				<Box sx={{height: '100%', display: 'flex', 
 					alignItems: 'center',}}>
 					<Badge
 						overlap="circular"
@@ -113,7 +115,7 @@ const Header = props => {
 				</Box>
 			</Box>
 			<SearchBox display={displaySearch} setSearch={setSearch} theme={theme} 
-				searchIcon={searchIcon} />
+				searchIcon={searchIcon} bigScreen={bigScreen} />
 			<AccountSettings display={displayAccount} userAvatar={userAvatar} setAccount={setAccount}
 					theme={theme} bigScreen={bigScreen} />					
 		</Box>

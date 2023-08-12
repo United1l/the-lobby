@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useMany } from "@refinedev/core";
-import { Box, Button, Grid, InputAdornment, Avatar, Badge, Divider } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { Box, Button, TextField, InputAdornment, Paper } from "@mui/material";
+import { GetGroupData } from "../dataRequest.jsx";
 
 const SearchBox = props => {
+	const bigScreen = props.bigScreen;
 	const theme = props.theme;
 	const display = props.display;
 	const searchIcon = props.searchIcon;
@@ -12,8 +12,10 @@ const SearchBox = props => {
 	const [ids, setIds] = useState([1,2,3]);
 	let results = [];
 	let renderResults = [];
-	let clubs = [];
 	let clubNamesObj = new Set();
+	let w = '100%';
+	let right = '';
+	let top = '0';
 
 	useEffect(() => {
 		const fetchClubs = setInterval(() => {
@@ -26,22 +28,12 @@ const SearchBox = props => {
     	}
 	}, []);
 
-	const { data, isError } = useMany({
-      		resource: "GAME_CLUBS",
-      		ids,
-      		liveMode: "auto",
-  		});
+  	const clubs = GetGroupData("GAME_CLUBS", ids);
 
-  		if (isError) {
-    		return <div>Something went wrong</div>
-  		}
-
-  		clubs = data?.data ?? [];
-
-  		if (clubs.length > 0) { 
-			const clubData = clubs.map(({ club_name }) => {
-				clubNamesObj.add(club_name);
-			});
+  	if (clubs.length > 0) { 
+		const clubData = clubs.map(({ club_name }) => {
+			clubNamesObj.add(club_name);
+		});
 	}
 
 	const clubNamesArr = [...clubNamesObj];
@@ -67,12 +59,18 @@ const SearchBox = props => {
 
 	renderResults = results.map(result => {
 		return <p key={result}>{result}</p>;
-	})
+	});
+
+	if (bigScreen) {
+		w = '400px';
+		right = '10%';
+		top = '5.86%';
+	}
 
 	return (
-		<Box sx={{display: display, height: '30%', width: 'auto', position: 'absolute', top: '0', zIndex: '5',
+		<Paper sx={{display: display, height: '30%', width: w, position: 'absolute', top: top, right: right, zIndex: '5',
 			backgroundColor: theme.bg, color: theme.textColor, flexDirection: 'column', justifyContent: 'space-between', 
-			alignItems: 'flex-end', pt: '1rem'}}>
+			alignItems: 'flex-end', p: '1rem'}} elevation={4}>
 			<TextField variant="outlined" type="text" label="Search for a club" value={searchItem} 
 				onChange={handleChange} InputProps={{
 					endAdornment: <InputAdornment position="end">{searchIcon}</InputAdornment>
@@ -81,7 +79,7 @@ const SearchBox = props => {
 				{renderResults}
 			</Box>
 			<Button onClick={handleClose}>Close</Button>
-		</Box>
+		</Paper>
 		);
 }
 

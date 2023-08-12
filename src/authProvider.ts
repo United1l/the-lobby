@@ -1,9 +1,8 @@
 import { AuthBindings } from "@refinedev/core";
-
 import { supabaseClient } from "./utility";
 
 const authProvider: AuthBindings = {
-  login: async ({ email, password, providerName }) => {
+  login: async ({ email, password, providerName, remember }) => {
     // sign in with oauth
     try {
       if (providerName) {
@@ -21,7 +20,7 @@ const authProvider: AuthBindings = {
         if (data?.url) {
           return {
             success: true,
-            redirectTo: "/",
+            redirectTo: "/dashboard",
           };
         }
       }
@@ -40,9 +39,13 @@ const authProvider: AuthBindings = {
       }
 
       if (data?.user) {
+        const userData = data.user;
+        const { id } = userData;
+
+        remember? localStorage.setItem('userId', id) : sessionStorage.setItem('userId', id)          
         return {
           success: true,
-          redirectTo: "/",
+          redirectTo: "/dashboard",
         };
       }
     } catch (error: any) {
@@ -77,7 +80,7 @@ const authProvider: AuthBindings = {
       if (data) {
         return {
           success: true,
-          redirectTo: "/",
+          redirectTo: "/register-success",
         };
       }
     } catch (error: any) {
@@ -147,7 +150,7 @@ const authProvider: AuthBindings = {
       if (data) {
         return {
           success: true,
-          redirectTo: "/",
+          redirectTo: "/login",
         };
       }
     } catch (error: any) {
@@ -173,6 +176,9 @@ const authProvider: AuthBindings = {
         error,
       };
     }
+
+    localStorage.removeItem('userId', id);
+    sessionStorage.removeItem('userId', id);
 
     return {
       success: true,
