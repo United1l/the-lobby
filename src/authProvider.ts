@@ -177,9 +177,6 @@ const authProvider: AuthBindings = {
       };
     }
 
-    localStorage.removeItem('userId', id);
-    sessionStorage.removeItem('userId', id);
-
     return {
       success: true,
       redirectTo: "/",
