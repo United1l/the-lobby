@@ -28,26 +28,11 @@ const Dashboard = props => {
 			setMatches(e.matches);
 		});
 
-	}, []);
-
-	const { data, isLoading, isError} = useOne({
-		resource: "USER_ACCOUNTS",
-		id: userId,
-	});
-
-	const user = data?.data;
-
-	if (isLoading) {
-		return <div>Loading...</div>
-	}
-
-	if (isError) {
-		return <div>Something went wrong</div>
-	}
-
-	const { user_name } = user;
+	}, []);	
 		
-	userAcc = user;
+	userAcc = getUser(userId);
+	
+	const { user_name } = userAcc;
 
 	if (menu) display = 'flex';
 
@@ -76,6 +61,25 @@ const Dashboard = props => {
 			</Box>
 		</ChatContextProvider>
 	);
+}
+
+const getUser = userId => {
+	const { data, isLoading, isError} = useOne({
+		resource: "USER_ACCOUNTS",
+		id: userId,
+	});
+
+	const user = data?.data;
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
+
+	if (isError) {
+		return <div>Something went wrong</div>
+	}
+
+	return user;
 }
 
 
