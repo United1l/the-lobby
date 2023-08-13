@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useOne } from "@refinedev/core";
 import { Box } from "@mui/material";
-import { SetUserName } from "./user-form/setUsername.jsx";
+import { SetUserName } from "../user-form/setUsername.jsx";
 import { Header } from "../../components/header/header.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { Main } from "../../components/main/main.jsx";
@@ -31,7 +31,7 @@ const Dashboard = props => {
 	}, []);	
 		
 	userAcc = getUser(userId);
-	
+
 	const { user_name } = userAcc;
 
 	if (menu) display = 'flex';
