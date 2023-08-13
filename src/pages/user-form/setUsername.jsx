@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { useUpdate, useGetIdentity } from "@refinedev/core";
 import { useNavigate } from "react-router-dom";
 import { ThemedTitleV2 } from "@refinedev/mui";
-import { Container, Box, TextField, Button } from "@mui/material";
+import { Paper, Box, TextField, Button } from "@mui/material";
 import { GetGroupData } from "../../components/dataRequest";
 
 const SetUserName = props => {
 	const [username, setUserName] = useState("");
+	const [disp, setDisp] = useState("flex");
 	const { data } = useGetIdentity();
 	const { mutate } = useUpdate();
 	const navigate = useNavigate();
@@ -31,16 +32,16 @@ const SetUserName = props => {
 				id: userId,
 			});
 
-			sessionStorage.setItem('userId', userId);
-
 			navigate('/preferences');
+
+			setDisp("none");
 		}
 
 		return;
 	}
 
 	return (
-		<Container sx={{height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+		<Paper sx={{height: '100%', display: disp, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: '50%',}}>
 			<Box sx={{height: '40%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
 				<ThemedTitleV2
 					collapsed={false}
@@ -51,7 +52,7 @@ const SetUserName = props => {
 					variant="outlined" />
 				<Button variant="contained" onClick={handleProceed}>Proceed</Button>
 			</Box>				
-		</Container>
+		</Paper>
 		);
 }
 

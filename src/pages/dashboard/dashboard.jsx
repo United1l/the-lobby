@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import { useOne } from "@refinedev/core";
 import { Box } from "@mui/material";
+import { SetUserName } from "./user-form/setUsername.jsx";
 import { Header } from "../../components/header/header.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { Main } from "../../components/main/main.jsx";
 import { ChatContextProvider, useOpenChat, useSetOpenChat } from "../../components/chatContext.jsx";
 
 const Dashboard = props => {
-	const [loggedId, setLogId] = useState(0);
+	const { data } = useGetIdentity();
+	const userId = data.user.id;
 	const [menu, setMenu] = useState(false);
 	const [darkMode, setDarkMode] = useState(false);
 	const [matches, setMatches] = useState(
 		window.matchMedia("(min-width: 768px)").matches
-		);	
+		);		
 
 	let display = 'none';
 	let theme = {
@@ -22,38 +24,30 @@ const Dashboard = props => {
 	let userAcc = null;
 
 	useEffect(() => {
-		const loggedId =  localStorage.getItem('userId') || sessionStorage.getItem('userId');
-
-		if (loggedId) {
-			setLogId(loggedId);
-		}
-
 		window.matchMedia("(min-width: 768px)").addEventListener('change', e => {
 			setMatches(e.matches);
 		});
 
 	}, []);
 
-	if (loggedId) {
-		const { data, isLoading, isError} = useOne({
-			resource: "USER_ACCOUNTS",
-			id: loggedId,
-		});
+	const { data, isLoading, isError} = useOne({
+		resource: "USER_ACCOUNTS",
+		id: userId,
+	});
 
-		const user = data?.data;
+	const user = data?.data;
 
-		if (isLoading) {
-			return <div>Loading...</div>
-		}
-
-		if (isError) {
-			return <div>Something went wrong</div>
-		}
-
-		const { user_name } = user;
-		
-		userAcc = user;
+	if (isLoading) {
+		return <div>Loading...</div>
 	}
+
+	if (isError) {
+		return <div>Something went wrong</div>
+	}
+
+	const { user_name } = user;
+		
+	userAcc = user;
 
 	if (menu) display = 'flex';
 
@@ -78,6 +72,7 @@ const Dashboard = props => {
 				<Box sx={{height: '95%', width: '100%', position: 'relative'}}>
 					<Main darkMode={darkMode} bigScreen={matches} userAcc={userAcc} />
 				</Box>
+				{!user_name && <SetUserName />}
 			</Box>
 		</ChatContextProvider>
 	);

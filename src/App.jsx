@@ -25,7 +25,6 @@ import { LogIn } from "./pages/user-form/logIn.jsx";
 import { SignUp } from "./pages/user-form/signUp.jsx";
 import { ForgotPassword } from "./pages/user-form/forgotPass.jsx";
 import { SignUpSuccess } from "./pages/user-form/signUpSuccess.jsx";
-import { SetUserName } from "./pages/user-form/setUsername.jsx";
 import { Preferences } from "./pages/preferences/preferences.jsx";
 import { Recommended } from "./pages/recommended/recommended.jsx";
 import { Dashboard } from "./pages/dashboard/dashboard.jsx";
@@ -60,7 +59,6 @@ function App() {
               <Routes>
                 <Route index element={<Landing />} />
                 <Route path="register-success" element={<SignUpSuccess />} />
-                <Route path="set-user-name" element={<SetUserName />} />
                 <Route path="preferences" element={<Preferences />} />
                 <Route path="recommended" element={<Recommended />} />
                 <Route 
