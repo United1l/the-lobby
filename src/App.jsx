@@ -24,9 +24,11 @@ import { Landing } from "./pages/landing/landing.jsx";
 import { LogIn } from "./pages/user-form/logIn.jsx";
 import { SignUp } from "./pages/user-form/signUp.jsx";
 import { ForgotPassword } from "./pages/user-form/forgotPass.jsx";
+import { UpdatePassword } from "./pages/user-form/updatePass.jsx";
 import { SignUpSuccess } from "./pages/user-form/signUpSuccess.jsx";
 import { Preferences } from "./pages/preferences/preferences.jsx";
-import { Recommended } from "./pages/recommended/recommended.jsx";
+import { CreateClub } from "./pages/create-club/create.jsx";
+import { UserProfile } from "./pages/user-profile-sett/profile.jsx";
 import { Dashboard } from "./pages/dashboard/dashboard.jsx";
 import { WithErrorBoundary } from "./components/withErrorBoundary.jsx";
 import { ArrayContextProvider } from "./components/arrayContext.jsx";
@@ -43,9 +45,8 @@ function App() {
           resources={[
               {
                 name: "GAME_CLUBS",
-                create: "/pages/dashboard/dashboard",
-                edit: "/pages/dashboard/dashboard",
-                list: "/pages/dashboard/dashboard",
+                create: "/create",
+                list: "/dashboard",
               },
 
             ]}
@@ -59,21 +60,20 @@ function App() {
               <Routes>
                 <Route index element={<Landing />} />
                 <Route path="register-success" element={<SignUpSuccess />} />
-                <Route path="preferences" element={<Preferences />} />
-                <Route path="recommended" element={<Recommended />} />
                 <Route 
                   element={
                     <Authenticated
                       fallback={
                         <CatchAllNavigate to="/login" />
                       }>
-                      <ThemedLayoutV2>
                         <Outlet />
-                      </ThemedLayoutV2>
                     </Authenticated>  
                   }
                  >  
                   <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="preferences" element={<Preferences />} />
+                  <Route path="create" element={<CreateClub />} />
+                  <Route path="profile" element={<UserProfile />} />
                 </Route>  
                 <Route
                   element={
@@ -93,6 +93,10 @@ function App() {
                   <Route 
                     path="/forgot-password"
                     element={<ForgotPassword />}
+                  />
+                  <Route 
+                    path="/update-password"
+                    element={<UpdatePassword />}
                   />
                 </Route>
                 <Route

@@ -63,7 +63,7 @@ const InfoCont = props => {
 
 					let newUserClub = [...array.userClubs, clubName];
 					mutate({
-						resource: "USER_ACCOUNTS",
+						resource: "USER_ACCOUNT",
 						values: {
 							game_club: newUserClub,
 						},

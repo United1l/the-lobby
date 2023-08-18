@@ -40,10 +40,20 @@ const InputComp = props => {
 
 		const jsonPayload = JSON.stringify(payload);
 
+		if (chats) { 
+			mutate({
+				resource: "GAME_CLUBS",
+				values: {
+					club_chat: [...chats, jsonPayload],
+				},
+				id,
+			});
+		}
+
 		mutate({
 			resource: "GAME_CLUBS",
 			values: {
-				club_chat: [...chats, jsonPayload],
+				club_chat: [jsonPayload],
 			},
 			id,
 		});
@@ -58,7 +68,7 @@ const InputComp = props => {
 
 	return (
 		<Box sx={{height: '8%', width: '100%', display: 'flex', justifyContent: 'space-evenly', 
-			alignItems: 'center', position: 'absolute', bottom: '3%', border: '1px solid black',
+			alignItems: 'center', position: 'absolute', bottom: '0', border: '1px solid black',
 			backgroundColor: 'lightblue'}}>
 			<AddBoxIcon color="secondary" sx={{cursor: 'pointer'}} />
 			<TextField variant="outlined" type="text" label={input.label} sx={{height: 'l00%', width: '80%',}} 

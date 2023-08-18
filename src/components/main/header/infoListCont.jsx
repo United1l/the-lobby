@@ -134,7 +134,7 @@ const InfoListCont = props => {
 		}
 
 		if (checkedState.checked) newGenres = [...newGenres, ...value];
-		console.log(newGenres);
+		
 		mutate({
 			resource: "GAME_CLUBS",
 			values: {
@@ -154,8 +154,8 @@ const InfoListCont = props => {
 				overflowX: 'hidden', borderRadius: '5px'}}>
 				{renderedVals}
 			</Box>
-			{(isAd && isMem)? <p style={{cursor: 'pointer'}} onClick={handleRemove}>Remove</p>:
-				<p style={{cursor: 'pointer'}} onClick={handleUpdate}>Update</p>}
+			{isAd? isMem? <p style={{cursor: 'pointer'}} onClick={handleRemove}>Remove</p>:
+				<p style={{cursor: 'pointer'}} onClick={handleUpdate}>Update</p>: <></> }
 		</BoxCont>
 		);
 }

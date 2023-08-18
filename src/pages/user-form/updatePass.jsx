@@ -1,9 +1,9 @@
 import { AuthPage, ThemedTitleV2 } from "@refinedev/mui";
 
-const SignUp = () => {
+const UpdatePassword = () => {
 	return (
 		<AuthPage 
-			type="register"
+			type="updatePassword"
 			title={
 				<ThemedTitleV2
 					collapsed={false}
@@ -14,4 +14,4 @@ const SignUp = () => {
 	);
 }
 
-export { SignUp }
+export { UpdatePassword };

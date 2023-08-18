@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
-import { useUpdate, useGetIdentity } from "@refinedev/core";
-import { useNavigate } from "react-router-dom";
+import { useUpdate } from "@refinedev/core";
 import { ThemedTitleV2 } from "@refinedev/mui";
 import { Paper, Box, TextField, Button } from "@mui/material";
-import { GetGroupData } from "../../components/dataRequest";
 
 const SetUserName = props => {
 	const [username, setUserName] = useState("");
-	const [disp, setDisp] = useState("flex");
-	const { data } = useGetIdentity();
 	const { mutate } = useUpdate();
-	const navigate = useNavigate();
-	const userId = data?.user?.id ?? 0;
-	console.log(userId);
+	const userId = props.userId;
+	const openUserD = props.openUserD;
+	const setUserD = props.setUserD;
+	let disp = "none";
 
 	const handleChange = e => {
 		e.preventDefault();
@@ -22,27 +19,28 @@ const SetUserName = props => {
 
 	const handleProceed = e => {
 		e.preventDefault();
-		console.log('running');
+		
 		if (userId != 0) {
 			mutate({
-				resource: "USER_ACCOUNTS",
+				resource: "USER_ACCOUNT",
 				values: {
 					user_name: username,
 				},
 				id: userId,
 			});
 
-			navigate('/preferences');
-
-			setDisp("none");
+			setUserD(false);
 		}
 
 		return;
 	}
 
+	if (openUserD) disp = "flex";
+
 	return (
-		<Paper sx={{height: '100%', display: disp, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: '50%',}}>
-			<Box sx={{height: '40%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+		<Paper sx={{height: '50%', width: '40%', display: disp, justifyContent: 'center', alignItems: 'center', 
+			position: 'absolute', top: '20%', right: '20%'}}>
+			<Box sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
 				<ThemedTitleV2
 					collapsed={false}
 					text="The Lobby"

@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
-import { useOne, useGetIdentity } from "@refinedev/core";
+import { useOne, useSubscription } from "@refinedev/core";
 import { Box } from "@mui/material";
 import { SetUserName } from "../user-form/setUsername.jsx";
 import { Header } from "../../components/header/header.jsx";
 import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { Main } from "../../components/main/main.jsx";
 import { ChatContextProvider, useOpenChat, useSetOpenChat } from "../../components/chatContext.jsx";
+import { RecommendedContextProvider, useOpenRecom, useSetOpenRecom } from "../../components/recommendedContext.jsx";
 
 const Dashboard = props => {
-	const { data } = useGetIdentity();
-	const userId = data.user.id;
+	const [userId, setUserId] = useState(0);
 	const [menu, setMenu] = useState(false);
 	const [darkMode, setDarkMode] = useState(false);
 	const [matches, setMatches] = useState(
 		window.matchMedia("(min-width: 768px)").matches
-		);		
+		);
+	const [openUserD, setUserD] = useState(true);			
 
 	let display = 'none';
 	let theme = {
@@ -28,11 +29,26 @@ const Dashboard = props => {
 			setMatches(e.matches);
 		});
 
-	}, []);	
+		const loggedUser = localStorage.getItem("userId") || sessionStorage.getItem("userId");
+
+		if (loggedUser) setUserId(loggedUser);
+
+	}, []);
+
+	useSubscription({
+		channel: "resources/GAME_CLUBS",
+		types: ["*"],
+	});
+
+	useSubscription({
+		channel: "resources/USER_ACCOUNT",
+		types: ["*"],
+	});
 		
 	userAcc = getUser(userId);
 
-	const { user_name } = userAcc;
+	const noClubs = userAcc.game_club == null;
+	const isUsername = userAcc.user_name || false;
 
 	if (menu) display = 'flex';
 
@@ -43,8 +59,9 @@ const Dashboard = props => {
 
 	return (
 		<ChatContextProvider>
-			<Box sx={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', 
-				background: theme.bg, color: theme.textColor,}} className="dashboard">
+			<RecommendedContextProvider def={noClubs}>
+				<Box sx={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', 
+				background: theme.bg, color: theme.textColor, position: 'relative'}} className="dashboard">
 				{!matches && <Box sx={{height: '1.8%', width: '100%', display: 'flex', alignItems: 'center', 
 					justifyContent: 'center', position: 'absolute', top: '0', pb: '2px'}}>
 					<p style={{fontWeight: 'bolder', fontSize: '9px'}}>The Lobby</p>	
@@ -52,20 +69,21 @@ const Dashboard = props => {
 				<Header menu={menu} setMenu={setMenu} darkMode={darkMode} setDarkMode={setDarkMode} 
 					bigScreen={matches} />
 				
-				<Sidebar loggedUser={user_name} display={display} setMenu={setMenu} darkMode={darkMode}
+				<Sidebar loggedUser={isUsername} display={display} setMenu={setMenu} darkMode={darkMode}
 				 menu={menu} bigScreen={matches} userAcc={userAcc} />
 				<Box sx={{height: '95%', width: '100%', position: 'relative'}}>
 					<Main darkMode={darkMode} bigScreen={matches} userAcc={userAcc} />
 				</Box>
-				{!user_name && <SetUserName />}
-			</Box>
+					{!isUsername && <SetUserName userId={userId} openUserD={openUserD} setUserD={setUserD} />}
+				</Box>
+			</RecommendedContextProvider>			
 		</ChatContextProvider>
 	);
 }
 
 const getUser = userId => {
 	const { data, isLoading, isError} = useOne({
-		resource: "USER_ACCOUNTS",
+		resource: "USER_ACCOUNT",
 		id: userId,
 	});
 

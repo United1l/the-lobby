@@ -1,6 +1,7 @@
 import { AuthBindings } from "@refinedev/core";
 import { supabaseClient } from "./utility";
 
+
 const authProvider: AuthBindings = {
   login: async ({ email, password, providerName, remember }) => {
     // sign in with oauth
@@ -39,10 +40,7 @@ const authProvider: AuthBindings = {
       }
 
       if (data?.user) {
-        const userData = data.user;
-        const { id } = userData;
-
-        remember? localStorage.setItem('userId', id) : sessionStorage.setItem('userId', id)          
+        remember? localStorage.setItem('userId', password) : sessionStorage.setItem('userId', password);          
         return {
           success: true,
           redirectTo: "/dashboard",
@@ -65,7 +63,13 @@ const authProvider: AuthBindings = {
   },
   register: async ({ email, password }) => {
     try {
-      const { data, error } = await supabaseClient.auth.signUp({
+      const { error } = await supabaseClient.from('USER_ACCOUNT').insert({
+        user_email: email,
+        id: password,
+      });
+
+
+      const { data } = await supabaseClient.auth.signUp({
         email,
         password,
       });

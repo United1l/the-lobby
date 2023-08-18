@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Box, Button, TextField, InputAdornment, Paper } from "@mui/material";
+import { Box, Avatar, Button, TextField, InputAdornment, Paper } from "@mui/material";
 import { GetGroupData } from "../dataRequest.jsx";
+import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 
 const SearchBox = props => {
 	const bigScreen = props.bigScreen;
@@ -8,6 +9,8 @@ const SearchBox = props => {
 	const display = props.display;
 	const searchIcon = props.searchIcon;
 	const setSearch = props.setSearch;
+	const openChat = useOpenChat();
+	const setOpenChat = useSetOpenChat();
 	const [searchItem, setSearchItem] = useState("");
 	const [ids, setIds] = useState([1,2,3]);
 	let results = [];
@@ -38,6 +41,18 @@ const SearchBox = props => {
 
 	const clubNamesArr = [...clubNamesObj];
 
+	const handleClick = e => {
+		e.preventDefault();
+
+		const name = e.target.textContent;
+
+		setOpenChat({
+			...openChat,
+			text: name,
+			open: true,
+		});
+	}
+
 	const handleClose = e => {
 		e.preventDefault();
 
@@ -58,7 +73,13 @@ const SearchBox = props => {
 		});
 
 	renderResults = results.map(result => {
-		return <p key={result}>{result}</p>;
+		return (
+			<Box key={result} 
+				sx={{height: '70%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
+				<Avatar src="" alt={result} sx={{height: '24px', width: '24px'}} />
+				<h4 onClick={handleClick} style={{cursor: 'pointer',}}>{result}</h4>
+			</Box>
+		);
 	});
 
 	if (bigScreen) {
@@ -70,12 +91,13 @@ const SearchBox = props => {
 	return (
 		<Paper sx={{display: display, height: '30%', width: w, position: 'absolute', top: top, right: right, zIndex: '5',
 			backgroundColor: theme.bg, color: theme.textColor, flexDirection: 'column', justifyContent: 'space-between', 
-			alignItems: 'flex-end', p: '1rem'}} elevation={4}>
+			alignItems: 'center', p: '1rem'}} elevation={4}>
 			<TextField variant="outlined" type="text" label="Search for a club" value={searchItem} 
 				onChange={handleChange} InputProps={{
 					endAdornment: <InputAdornment position="end">{searchIcon}</InputAdornment>
 				}} />
-			<Box sx={{height: '40%', width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+			<Box sx={{height: '40%', width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center',
+				overflowY: 'auto', overflowX: 'hidden'}}>
 				{renderResults}
 			</Box>
 			<Button onClick={handleClose}>Close</Button>

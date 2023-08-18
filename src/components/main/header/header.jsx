@@ -6,7 +6,7 @@ const Header = props => {
 	const openSett = props.openSett;
 	const setOpenSett = props.setOpenSett;
 	const clubName = <h5 style={{margin: '0'}}>{headerInfo.club_name}</h5>;
-	const clubMem = <p style={{margin: '0'}}>{`${headerInfo.club_members.length} members`}</p>;
+	const clubMem = <p style={{margin: '0'}}>{`${headerInfo.club_members?.length || 0} members`}</p>;
 	const openChat = useOpenChat();
 	const setOpenChat = useSetOpenChat();
 

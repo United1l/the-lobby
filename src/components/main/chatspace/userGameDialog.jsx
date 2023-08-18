@@ -3,7 +3,7 @@ import {
 } from "@mui/material";
 
 const UserGameDialog = props => {
-	const userGames = props.userGames;
+	const userGames = props.userGames || [];
 	const open = props.open;
 	const setOpenGameD = props.setOpenGameD;
 	const children = userGames.map(game => {

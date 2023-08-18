@@ -15,7 +15,7 @@ const ChatSpace = props => {
 		setOpenSett(false);
 	}
 		
-	renderChats = clubChat.map(chat => {
+	renderChats = clubChat?.map(chat => {
 		const parsedChats = JSON.parse(chat);
 		const { id, userName, message, date } = parsedChats;
 

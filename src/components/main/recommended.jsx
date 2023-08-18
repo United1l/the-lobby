@@ -3,17 +3,23 @@ import { useMany, useUpdate } from "@refinedev/core";
 import { Box, Button } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { AvatarDisp } from "../avatarDisplay.jsx";
-import { useArray } from "../arrayContext.jsx";
+import { useArray, useArrayDispatch } from "../arrayContext.jsx";
+import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
+import { useOpenRecom, useSetOpenRecom } from "../recommendedContext.jsx";
+import { GetGroupData } from "../dataRequest.jsx";
 
 const Recommended = props => {
 	const id = props.id;
+	const userAcc = props.userAcc;
+	const openRecom = useOpenRecom();
+	const setOpenRecom = useSetOpenRecom();
 	const [ids, setIds] = useState([1,2,3]);
 	const array = useArray();
-	const openRecom = props.openRecom;
-	const setOpenRecom = props.setOpenRecom;
-	let disp = 'flex';
-	let clubs = [];
+	const arrayDispatch = useArrayDispatch();
+	const { mutate } = useUpdate();
 	let clubNames = [];
+	let avatarArray = [];
+	let disp = 'none';
 
 	useEffect(() => {
 		const fetchClubs = setInterval(() => {
@@ -26,13 +32,14 @@ const Recommended = props => {
     	}
 	}, []);
 
-	const { data, isLoading, isError } = useMany({
-      	resource: "GAME_CLUBS",
-      	ids,
-      	liveMode: "auto",
-  	});
+    const { data, isLoading, isError } = useMany({
+		resource: "GAME_CLUBS",
+		ids
+	});
 
-  	if (isLoading) {
+	const clubs = data?.data ?? [];
+
+	if (isLoading) {
     	return <div>Loading...</div>
   	}
 
@@ -40,29 +47,49 @@ const Recommended = props => {
     	return <div>Something went wrong</div>
   	}
 
-  	clubs = data?.data ?? [];
+	if (clubs) {
+		clubs.map(club => {
+			const { club_name } = club;
+			clubNames = [...clubNames, club_name];
+		});
+	}
 
+	const preferredClubs = clubs.map(({ id, club_name, club_genres }) => {
+			const genres = club_genres;
 
-	clubs.map(club => {
-		const { club_name } = club;
-		clubNames = [...clubNames, club_name];
-	}) 
+			genres.map(genre => {
+				let checkPref = array.preferences.every(pref => {
+					genre.includes(pref);
+				});
 
-	const avatarArray = clubNames.map(name => {
-		return (
-			<Grid xs={4} key={name}>
-				<AvatarDisp title={name} src={""} alt={name} h={100} w={100} />
-			</Grid>
-		);
-	});
+				if (checkPref) return club_name;
+				return; 
+			});
+		});
+	
+	if (typeof(preferredClubs[0]) == String) {
+		avatarArray = preferredClubs.map(prefName => {
+			return (
+				<Grid xs={4} key={prefName}>
+					<AvatarDisp title={prefName} src={""} alt={prefName} h={100} w={100} />
+				</Grid>
+				);
+			});	
+	} else {
+		avatarArray = clubNames.map(name => {
+			return (
+				<Grid xs={4} key={name}>
+					<AvatarDisp title={name} src={""} alt={name} h={100} w={100} />
+				</Grid>
+				);
+			});
+	}
 
-	if (!openRecom) disp = 'none';
+	if (!openRecom) disp = 'flex';	 
 
 	const updateUser = id => {
-			const { mutate } = useUpdate();
-
 			mutate({
-				resource: 'USER_ACCOUNTS',
+				resource: 'USER_ACCOUNT',
 				values: {
 					game_club: array.userClubs,
 				},
@@ -73,7 +100,41 @@ const Recommended = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 
+		array.userClubs.forEach(club => {
+			if (userAcc.game_club?.includes(club)) {
+				arrayDispatch({
+					type: 'Remove',
+					userClub: club,
+					user: array.userClubs,
+					arr: [],
+				});
+			}
+		});
+
 		updateUser(id);
+
+		for (let i = 0; i < clubs.length; i++) {
+			for (let j = 0; j < array.userClubs.length; i++) {
+				try {
+					const { id, club_name } = clubs[i];
+				
+					const clubId = id;
+					if (array.userClubs[j] == club_name) {
+						let newMem = [];
+						newMem.push(userAcc.user_name);
+						mutate({
+							resource: "GAME_CLUBS",
+							values: {
+								club_members: newMem,
+							},
+							id: clubId,
+						});
+					}
+				} catch (e) {
+					console.log(`Error updating club members is ${e}`);
+				}
+			}
+		}
 
 		setOpenRecom(false);
 	}
@@ -86,8 +147,11 @@ const Recommended = props => {
 
 	return (
 		<Box sx={{ height: '100%', width: '100%', display: disp, flexDirection: 'column',
-			justifyContent: 'space-evenly', alignItems: 'center'}}>
-			<p onClick={handleBack}>Back</p>
+			justifyContent: 'space-evenly', alignItems: 'center', position: 'absolute', 
+			backgroundColor: 'white'}}>
+			<p onClick={handleBack} style={{alignSelf: 'flex-start', margin: '0 1rem', cursor: 'pointer'}}>
+				Back
+			</p>
 			<Grid container spacing={2} sx={{height: '40%', width: '80%', justifyContent: 'center'}}>
 				{avatarArray}
 			</Grid>

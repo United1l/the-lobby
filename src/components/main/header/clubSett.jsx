@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUpdate, useDelete } from "@refinedev/core";
+import { useUpdate } from "@refinedev/core";
 import { Box, TextField, Paper } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
@@ -36,7 +36,7 @@ const ClubSett = props => {
 		const newClubMem = clubMem.filter(mem => mem != userName);
 
 		mutate({
-			resource: "USER_ACCOUNTS",
+			resource: "USER_ACCOUNT",
 			values: {
 				game_club: newGameClub,
 				},
@@ -67,7 +67,7 @@ const ClubSett = props => {
 				const { id, user_name } = user;
 				if (user_name == mem) {
 					mutate({
-						resource: "USER_ACCOUNTS",
+						resource: "USER_ACCOUNT",
 						values: {
 							game_club: [],
 						},

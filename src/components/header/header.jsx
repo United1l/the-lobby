@@ -18,6 +18,7 @@ const Header = props => {
 	const setDarkMode = props.setDarkMode;
 	const [search, setSearch] = useState(false);
 	const [account, setAccount] = useState(false);
+	const [img, setImg] = useState("");
 	let displaySearch = 'none';
 	let displayAccount = 'none';
 	let iconsTheme = {
@@ -32,7 +33,7 @@ const Header = props => {
 
 	const dark = <DarkModeIcon color={iconsTheme.iconBg} fontSize="small" />;
 	const searchIcon = <SearchIcon color={iconsTheme.iconBg} fontSize="small" />;
-	const userAvatar = <Avatar src={""} alt={""} sx={{height:'30', width: '30', cursor: 'pointer'}} />;
+	const userAvatar = <Avatar src={`Pictures/${img}`} alt={img} sx={{height:'30', width: '30', cursor: 'pointer'}} />;
 
 	let themeSwitch = dark;
 
@@ -117,7 +118,7 @@ const Header = props => {
 			<SearchBox display={displaySearch} setSearch={setSearch} theme={theme} 
 				searchIcon={searchIcon} bigScreen={bigScreen} />
 			<AccountSettings display={displayAccount} userAvatar={userAvatar} setAccount={setAccount}
-					theme={theme} bigScreen={bigScreen} />					
+					theme={theme} bigScreen={bigScreen} setImg={setImg} />					
 		</Box>
 		);
 }

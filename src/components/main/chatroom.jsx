@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useSubscription } from "@refinedev/core";
+import { useSubscription, useMany } from "@refinedev/core";
 import { Box } from "@mui/material";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { GetGroupData } from "../dataRequest.jsx";
 import { InputComp } from "./chatspace/inputComp.jsx";
@@ -18,52 +19,86 @@ const Chatroom = props => {
 	}
 
 	const [uids, setUIds] = useState(numArr);
-	const [ids, setIds] = useState([1,2,3]);
 	const [openSett, setOpenSett] = useState(false);
 	const [openGameD, setOpenGameD] = useState(false);
 	const scroll = useRef();
 	const openChat = useOpenChat();
+	const setOpenChat = useSetOpenChat();
 	const clubName = openChat.text;
+	const clubs = props.clubs;
 	let targetClub = null;
-	let clubs = [];
 
 	useEffect(() => {
-		const fetchClubs = setInterval(() => {
-      		const newIds = ids.map(id => id + 3);
-      		if (clubs.length > 2) setIds(newIds);
-   	 	} ,6000);
-
    	 	if (scroll.current) {
 			scroll.current.scrollIntoView({ behaviour: "smooth" });
 		}
-		console.log(scroll.current);
 
-		return () => {
-      		clearInterval(fetchClubs)
-    	}
-	}, []);
+	}, [scroll.current]);
 
 	useSubscription({
 		channel: "resources/GAME_CLUBS",
 		types: ["UPDATE"],
 	});
 
-	const users = GetGroupData("USER_ACCOUNTS", uids);
+	const users = GetGroupData("USER_ACCOUNT", uids);
 
-	clubs = GetGroupData("GAME_CLUBS", ids);
-
-  	if (clubs) { 
-		clubs.forEach(club => {
-			const { club_name } = club;
+  	if (clubs) {
+  		clubs.forEach(club => {
+  			const { club_name } = club;
 			if (club_name == clubName) {
 				targetClub = club;
 			}
 		});
-	}
-
+  	}
+  	
 	const { id, club_name, club_members, club_genres, club_admin, club_chat } = targetClub;
 	const headerInfo = { id, club_name, club_members, club_genres, club_admin }
 	const { games } = userAcc;
+
+	const handleJoin = e => {
+  		e.preventDefault();
+
+  		let newClub = [];
+  		let newMem = [];
+
+  		if (userAcc.game_club != null) {
+  			newClub = [...userAcc.game_club, club_name];
+  		} else newClub = [club_name];
+
+  		if (club_members == null) {
+  			newMem = [userAcc.user_name];
+  		} else newMem = [...club_members, userAcc.user_name];
+  		
+  		mutate({
+  			resource: "GAME_CLUBS",
+  			values: {
+  				club_members: newMem,
+  			},
+  			id,
+  		});
+
+  		mutate({
+  			resource: "USER_ACCOUNT",
+  			values: {
+  				game_club: newClub,
+  			},
+  			id: userAcc.id,
+  		});
+
+  		setOpenChat({
+  			...openChat,
+  			open: false,
+  		});
+  	}
+
+	const isMember = null || !club_members?.includes(userAcc.user_name);
+
+	const join = <Box sx={{height: '8%', width: '100%', display: 'flex', justifyContent: 'center', 
+			alignItems: 'center', position: 'absolute', bottom: '3%', border: '1px solid black',
+			backgroundColor: 'lightblue', cursor: 'pointer'}} onClick={handleJoin}>
+			<AddBoxIcon color="secondary" />
+			<h4>Join club</h4>		
+	</Box>;
 
 	return (
 		<Box sx={{width: '100%', height: '100%', position: 'relative', display: 'flex', 
@@ -72,7 +107,7 @@ const Chatroom = props => {
 			<ChatSpace setOpenSett={setOpenSett} clubChat={club_chat} setOpenGameD={setOpenGameD} 
 				userAcc={userAcc} />
 			<span ref={scroll}></span>
-			<InputComp userAcc={userAcc} clubInfo={targetClub} scroll={scroll} />
+			{isMember? join : <InputComp userAcc={userAcc} clubInfo={targetClub} scroll={scroll} />}
 			{openSett && <ClubSett clubInfo={headerInfo} userAcc={userAcc} setOpenSett={setOpenSett} 
 			 users={users} setUIds={setUIds} uids={uids} />}
 			{<UserGameDialog userGames={games} open={openGameD} setOpenGameD={setOpenGameD} />} 
