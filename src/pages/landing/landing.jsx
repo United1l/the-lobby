@@ -60,7 +60,7 @@ const Landing = (props) => {
 							 /> 
 						</Box>
 						<Box sx={{maxWidth: '40%', ml: '1rem'}}>
-							<h1 style={{fontSize: 'clamp(60px, 2vw, 100px)', color: '#fff', margin: '0'}}>
+							<h1 style={{fontSize: 'clamp(40px, 2vw, 100px)', color: '#fff', margin: '0'}}>
 								Welcome 
 							</h1>
 							<h1 style={{color: '#fff', margin: '0'}}>to</h1>

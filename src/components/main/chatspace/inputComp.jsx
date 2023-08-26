@@ -67,7 +67,7 @@ const InputComp = props => {
 	}
 
 	return (
-		<Box sx={{height: '8%', width: '100%', display: 'flex', justifyContent: 'space-evenly', 
+		<Box sx={{height: '9%', width: '100%', display: 'flex', justifyContent: 'space-evenly', 
 			alignItems: 'center', position: 'absolute', bottom: '0', border: '1px solid #adb5db'}}>
 			<AddBoxIcon color="secondary" sx={{cursor: 'pointer'}} />
 			<TextField variant="outlined" type="text" label={input.label} sx={{height: 'l00%', width: '80%',}} 
