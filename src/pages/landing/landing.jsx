@@ -14,7 +14,8 @@ const Landing = (props) => {
 	const [matches, setMatches] = useState(
 		window.matchMedia("(min-width: 768px)").matches
 		);
-	let imgH = 150;
+	let imgH = 200;
+	let direction = 'column';
 	const buttonStyle = {margin: '0 0.5rem', color: primary};
 	const hTheme = {color: primary};
 
@@ -25,7 +26,10 @@ const Landing = (props) => {
 
 	}, []);
 
-	if (matches) imgH = 400;
+	if (matches) {
+		imgH = 400;
+		direction = 'row';
+	}
 
 	const handleSignClick = e => {
 		e.preventDefault();
@@ -53,12 +57,8 @@ const Landing = (props) => {
 							Log in
 						</Button>
 					</Box>
-					<Box sx={{height: '90%', width: '100%', display: 'flex', 
+					<Box sx={{height: '90%', width: '100%', display: 'flex', flexDirection: direction,
 						justifyContent: 'space-evenly', alignItems: 'center', p: '1rem'}}>
-						<Box sx={{maxWidth: '50%'}}>
-							<img src={groupChat} alt="group chat image" height={imgH} width={imgH}
-							 /> 
-						</Box>
 						<Box sx={{maxWidth: '40%', ml: '1rem'}}>
 							<h1 style={{fontSize: 'clamp(40px, 2vw, 100px)', color: '#fff', margin: '0'}}>
 								Welcome 
@@ -67,9 +67,13 @@ const Landing = (props) => {
 							<h1 style={{color: '#343a40'}}>The Lobby</h1>
 							<h3 style={{color: '#fff'}}>Where game lovers hang out with game lovers</h3>
 						</Box>
+						<Box sx={{maxWidth: '50%'}}>
+							<img src={groupChat} alt="group chat image" height={imgH} width={imgH}
+							 /> 
+						</Box>
 					</Box>							
 				</Box>
-				<Box sx={{height: '80%', width: '100%', display: 'flex', 
+				<Box sx={{height: '80%', width: '100%', display: 'flex', flexDirection: direction,
 						justifyContent: 'space-evenly', alignItems: 'center', p: '1rem'}}>
 					<Box sx={{width: '50%'}}>
 						<img src={virtualHangout} alt="virtual chat image" height={imgH} width={imgH} 
@@ -81,7 +85,7 @@ const Landing = (props) => {
 								and enjoy in club group chats with friends</h3>
 					</Box>
 				</Box>
-				<Box sx={{height: '80%', width: '100%', display: 'flex', 
+				<Box sx={{height: '80%', width: '100%', display: 'flex', flexDirection: direction,
 						justifyContent: 'space-evenly', alignItems: 'center', p: '1rem'}}>
 					<Box sx={{width: '40%'}}>
 						<h1 style={hTheme}>Create a club</h1>
