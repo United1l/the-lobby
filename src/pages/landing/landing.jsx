@@ -46,7 +46,7 @@ const Landing = (props) => {
 			overflowY: 'auto', overflowX: 'hidden'}}>
 				<Box sx={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
 					alignItems: 'center', justifyContent: 'center', backgroundColor: primary,}}>
-					<Box sx={{display: 'flex', justifyContent: 'flex-end', justifySelf: 'flex-start',
+					<Box sx={{height: '10%', display: 'flex', justifyContent: 'flex-end', justifySelf: 'flex-start',
 						alignSelf: 'flex-end', alignItems: 'center', position: 'absolute', top: '2%'}}>
 						<Button variant="contained" sx={buttonStyle} onClick={handleSignClick}
 							color="white">
