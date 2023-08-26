@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUpdate } from "@refinedev/core";
 import { ThemedTitleV2 } from "@refinedev/mui";
-import { Paper, Box, TextField, Button } from "@mui/material";
+import { Paper, Box, TextField, Button, Alert, AlertTitle } from "@mui/material";
 
 const SetUserName = props => {
 	const [username, setUserName] = useState("");
@@ -38,7 +38,7 @@ const SetUserName = props => {
 	if (openUserD) disp = "flex";
 
 	return (
-		<Paper sx={{height: '50%', width: '40%', display: disp, justifyContent: 'center', alignItems: 'center', 
+		<Paper sx={{height: '50%', width: '45%', display: disp, justifyContent: 'center', alignItems: 'center', 
 			position: 'absolute', top: '20%', right: '20%', p: '1rem'}}>
 			<Box sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
 				<ThemedTitleV2
@@ -48,6 +48,11 @@ const SetUserName = props => {
 				<h3>Set username</h3>
 				<TextField type="text" label="Username" value={username} onChange={handleChange}
 					variant="outlined" />
+				<Alert severity="info">
+				<AlertTitle>Info</AlertTitle>
+					Don't reset username if already set <br />
+					Refresh page if username dialog is still onscreen
+				</Alert>	
 				<Button variant="contained" onClick={handleProceed}>Proceed</Button>
 			</Box>				
 		</Paper>

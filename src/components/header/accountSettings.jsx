@@ -53,7 +53,7 @@ const AccountSettings = props => {
 	}
 
 	return (
-		<Paper sx={{height: '35%', width: w, position: 'absolute', top: top, right: right, pt: '1rem',
+		<Paper sx={{height: '40%', width: w, position: 'absolute', top: top, right: right, pt: '1rem',
 			display: display, flexDirection: 'column', alignItems: 'center', zIndex: '5',
 			justifyContent: 'space-evenly', backgroundColor: theme.bg, color: theme.textColor}} elevation={4}>
 			<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
