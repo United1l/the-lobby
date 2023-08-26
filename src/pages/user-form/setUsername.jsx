@@ -39,7 +39,7 @@ const SetUserName = props => {
 
 	return (
 		<Paper sx={{height: '50%', width: '40%', display: disp, justifyContent: 'center', alignItems: 'center', 
-			position: 'absolute', top: '20%', right: '20%'}}>
+			position: 'absolute', top: '20%', right: '20%', p: '1rem'}}>
 			<Box sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
 				<ThemedTitleV2
 					collapsed={false}

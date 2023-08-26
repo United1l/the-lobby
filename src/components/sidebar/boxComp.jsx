@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUpdate } from "@refinedev/core";
 import { Box, Avatar, TextField } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { useOpenRecom, useSetOpenRecom } from "../recommendedContext.jsx";
 
@@ -9,6 +10,7 @@ const children = props.children;
 const isBoard = props.isBoard;
 const title1 = props.title1;
 const title2 = props.title2;
+const theme = props.theme;
 const openChat = useOpenChat();
 const setOpenChat = useSetOpenChat();
 const openRecom = useOpenRecom();
@@ -98,7 +100,7 @@ renderChildren = children?.map(child => {
 			<Box key={child} 
 				sx={{height: '70%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
 				<Avatar src="" alt={child} sx={{height: '24px', width: '24px'}} />
-				<h4 onClick={handleClick} style={{cursor: 'pointer',}}>{child}</h4>
+				<h5 onClick={handleClick} style={{cursor: 'pointer',}}>{child}</h5>
 			</Box>
 		);
 	}
@@ -116,13 +118,13 @@ return (
 			{renderChildren}
 		</Box>
 		{(isBoard && edit) && <Box sx={{display: 'flex', flexDirection: 'column',
-			height: '60%', width: '80%'}}>
+			height: '60%', width: '80%', backgroundColor: theme.bg}}>
 			<TextField type="text" label="Game 1" value={game1} onChange={handleGame1} 
 				variant="outlined" sx={{mb: '0.5rem'}} />
 			<TextField type="text" label="Game 2" value={game2} onChange={handleGame2} 
 				variant="outlined" sx={{mb: '0.5rem'}} />
 		</Box>}	
-		{isBoard && <h5 style={{cursor: 'pointer'}} onClick={handleEdit}>edit</h5>}
+		{isBoard && <EditIcon sx={{cursor: 'pointer'}} onClick={handleEdit} size="small" color="primary" />}
 		{(isBoard && edit) && <h5 style={{cursor: 'pointer'}} onClick={handleUpdate}>update</h5>}
 	</Box>
 	);

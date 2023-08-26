@@ -1,7 +1,8 @@
 import { useState, useEffect} from "react";
 import { useMany, useUpdate } from "@refinedev/core";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Alert, AlertTitle } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AvatarDisp } from "../avatarDisplay.jsx";
 import { useArray, useArrayDispatch } from "../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
@@ -149,9 +150,13 @@ const Recommended = props => {
 		<Box sx={{ height: '100%', width: '100%', display: disp, flexDirection: 'column',
 			justifyContent: 'space-evenly', alignItems: 'center', position: 'absolute', 
 			backgroundColor: 'white'}}>
-			<p onClick={handleBack} style={{alignSelf: 'flex-start', margin: '0 1rem', cursor: 'pointer'}}>
-				Back
-			</p>
+			<ArrowBackIcon onClick={handleBack} sx={{alignSelf: 'flex-start', cursor: 'pointer', 
+				margin: '0 1rem'}} size="small" color="secondary" />	
+			<h2>Preferences</h2>
+			<Alert severity="info">
+				<AlertTitle>Info</AlertTitle>
+				Clubs aligned with your preferences
+			</Alert>
 			<Grid container spacing={2} sx={{height: '40%', width: '80%', justifyContent: 'center'}}>
 				{avatarArray}
 			</Grid>

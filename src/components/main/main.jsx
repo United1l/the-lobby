@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSubscription, useMany } from "@refinedev/core";
 import { Box } from "@mui/material";
+import HighlightAltIcon from "@mui/icons-material/HighlightAlt";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { Recommended } from "./recommended.jsx";
 import { Chatroom } from "./chatroom.jsx";
@@ -10,13 +11,13 @@ const Main = props => {
 	const userAcc = props.userAcc;
 	const [ids, setIds] = useState([1,2,3]);
 	const openChat = useOpenChat();
-	const id = userAcc.id || "";
-	const userClubs = userAcc.game_club || [];
+	const id = userAcc?.id || "";
+	const userClubs = userAcc?.game_club || [];
 	let w = '100%';
 	let pos = 'relative';
 
 	if (bigScreen) {
-		w = '80%';
+		w = '82%';
 		pos = 'absolute';
 	}
 
@@ -50,7 +51,11 @@ const Main = props => {
 		<Box sx={{height: '100%', width: w, position: pos, right: '0', display: 'flex', 
 			justifyContent: 'center', alignItems: 'center', flexGrow: '1'}}>
 			{<Recommended id={id} userAcc={userAcc} />}
-			{!openChat.open && <p>Select a club to open chat</p>}
+			{!openChat.open && <Box sx={{display: 'flex', flexDirection: 'column', 
+				alignItems: 'center'}}>
+				<h3>Select a club to open chat</h3>
+				<HighlightAltIcon size="small" color="primary" />
+			</Box>}
 			{openChat.open && <Chatroom userAcc={userAcc} clubs={clubs}/>}
 		</Box>
 		);

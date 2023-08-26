@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Recommended } from '../pages/recommended/recommended.jsx';
+import { Recommended } from '../components/main/recommended.jsx';
 
 test("renders the recommended component", () => {
 	render(<Recommended />);

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUpdate } from "@refinedev/core";
 import { Box, Button, TextField, List, ListItem, ListItemText, Divider } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useOpenChat, useSetOpenChat } from "../chatContext.jsx";
 import { useOpenRecom, useSetOpenRecom } from "../recommendedContext.jsx";
 
@@ -11,6 +12,7 @@ const MenuCont = props => {
 	const title1 = props.title1;
 	const title2 = props.title2;
 	const setMenu = props.setMenu;
+	const theme = props.theme;
 	const { mutate } = useUpdate();
 	const openChat = useOpenChat();
 	const setOpenChat = useSetOpenChat();
@@ -115,17 +117,17 @@ const MenuCont = props => {
 			alignItems: 'center', overflowX: 'hidden', overflowY: 'auto'}}>
 			{title1}
 			<Button onClick={handleList}>{title2}</Button>
-			<List sx={{width: '80%', display: listDisp, bgcolor: 'background.paper'}}>
+			<List sx={{width: '80%', display: listDisp, bgcolor: theme.bg}}>
 				{renderList}
 			</List>
 			{(isBoard && edit) && <Box sx={{display: 'flex', flexDirection: 'column',
-					height: '60%', width: '80%'}}>
+					height: '60%', width: '80%', backgroundColor: theme.bg}}>
 					<TextField type="text" label="Game 1" value={game1} onChange={handleGame1} 
 						variant="outlined" sx={{mb: '0.5rem'}} />
 					<TextField type="text" label="Game 2" value={game2} onChange={handleGame2} 
 						variant="outlined" sx={{mb: '0.5rem'}} />
 				</Box>}	
-			{isBoard && <h5 style={{cursor: 'pointer'}} onClick={handleEdit}>edit</h5>}
+			{isBoard && <EditIcon sx={{cursor: 'pointer'}} onClick={handleEdit} size="small" color="primary" />}
 			{(isBoard && edit) && <h5 style={{cursor: 'pointer'}} onClick={handleUpdate}>update</h5>}		
 		</Box>
 	);

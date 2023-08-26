@@ -48,32 +48,31 @@ const InputComp = props => {
 				},
 				id,
 			});
+		} else if (!chats) {
+			mutate({
+				resource: "GAME_CLUBS",
+				values: {
+					club_chat: [jsonPayload],
+				},
+				id,
+			});
 		}
-
-		mutate({
-			resource: "GAME_CLUBS",
-			values: {
-				club_chat: [jsonPayload],
-			},
-			id,
-		});
 
 		setInput({
 			mess: "",
 			label: "type something...",
 		});
 
-		scroll.current.scrollIntoView({ behaviour: "smooth" });
+		scroll.current.scrollIntoView(true);
 	}
 
 	return (
 		<Box sx={{height: '8%', width: '100%', display: 'flex', justifyContent: 'space-evenly', 
-			alignItems: 'center', position: 'absolute', bottom: '0', border: '1px solid black',
-			backgroundColor: 'lightblue'}}>
+			alignItems: 'center', position: 'absolute', bottom: '0', border: '1px solid #adb5db'}}>
 			<AddBoxIcon color="secondary" sx={{cursor: 'pointer'}} />
 			<TextField variant="outlined" type="text" label={input.label} sx={{height: 'l00%', width: '80%',}} 
 			value={input.mess} onChange={handleChange} />
-			<SendIcon sx={{cursor: 'pointer'}} onClick={handleSubmit} />	
+			<SendIcon sx={{cursor: 'pointer'}} onClick={handleSubmit} color="primary" />	
 		</Box>
 		);
 }

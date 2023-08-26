@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUpdate } from "@refinedev/core";
 import { Box, TextField, Paper } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";
 import { DeleteOne } from "../../dataRequest.jsx";
@@ -10,11 +9,11 @@ import { InfoListCont } from "./infoListCont.jsx";
 
 const ClubSett = props => {
 	const clubInfo = props.clubInfo;
-	const clubName = clubInfo.club_name;
-	const clubMem = clubInfo.club_members;
-	const clubGenres = clubInfo.club_genres;
-	const clubAdmin = clubInfo.club_admin;
-	const clubId = clubInfo.id;
+	const clubName = clubInfo?.club_name;
+	const clubMem = clubInfo?.club_members;
+	const clubGenres = clubInfo?.club_genres;
+	const clubAdmin = clubInfo?.club_admin;
+	const clubId = clubInfo?.id;
 	const users = props.users;
 	const uids = props.uids;
 	const setUIds = props.uids;
@@ -23,16 +22,18 @@ const ClubSett = props => {
 	const userName = user_name;
 	const userId = id;
 	const setOpenSett = props.setOpenSett;
+	const backImage = props.backgroundImage;
 	const array = useArray();
 	const openChat = useOpenChat();
 	const setOpenChat = useSetOpenChat();
 	const { mutate } = useUpdate();
 	const isAd = userName == clubAdmin;
 
+	const newGameClub = array.userClubs.filter(club => club != clubName);
+
 	const handleLeave = e => {
 		e.preventDefault();
 
-		const newGameClub = array.userClubs.filter(club => club != clubName);
 		const newClubMem = clubMem.filter(mem => mem != userName);
 
 		mutate({
@@ -62,19 +63,17 @@ const ClubSett = props => {
 	const handleDelete = e => {
 		e.preventDefault();
 
-		clubMem.forEach(mem => {
-			users.forEach(user => {
-				const { id, user_name } = user;
-				if (user_name == mem) {
-					mutate({
-						resource: "USER_ACCOUNT",
-						values: {
-							game_club: [],
-						},
-						id,
-					});
-				} else setUIds(uids.map(uid => uid + 50));
-			});
+		users.forEach(user => {
+			const { id, user_name } = user;
+			if (clubMem.includes(user_name)) {
+				mutate({
+					resource: "USER_ACCOUNT",
+					values: {
+						game_club: newGameClub,
+					},
+					id,
+				});
+			} else setUIds(uids.map(uid => uid + 50));
 		});
 
 		DeleteOne("GAME_CLUBS", clubId);
@@ -90,7 +89,8 @@ const ClubSett = props => {
 		<Paper sx={{height: '77%', width: '60%', position: 'absolute', top: '11%', left: '20%', 
 			display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
 			alignItems: 'center',}} elevation={4}>
-			<Box sx={{height: '20%', width: '100%', backgroundColor: 'gray',}}>
+			<Box sx={{height: '20%', width: '100%', backgroundImage: `url(${backImage})`, 
+				backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat',}}>
 				{/*image-box*/}
 			</Box>
 			{isAd && <InfoCont title="Club name" isAd={isAd} value={clubName} clubId={clubId} 
@@ -99,7 +99,7 @@ const ClubSett = props => {
 			{isAd && <InfoListCont title="Club members" isAd={isAd} value={clubMem} clubId={clubId} 
 				users={users} clubName={clubName} clubAdmin={clubAdmin} />}
 			{!isAd && <InfoListCont title="Club members" value={clubMem} />}
-			<p style={{margin: '0'}}>{`Admin: ${clubAdmin}`}</p>
+			<h6>{`Admin: ${clubAdmin}`}</h6>
 			{isAd && <InfoListCont title="Club preferences" isAd={isAd} value={clubGenres} 
 				clubId={clubId} setOpenSett={setOpenSett} users={users} />}
 			{!isAd && <InfoListCont title="Club preferences" value={clubGenres} />}

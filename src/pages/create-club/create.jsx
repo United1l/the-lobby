@@ -44,12 +44,6 @@ const CreateClub = props => {
 		}));
 	}
 
-	const handleBack = e => {
-		e.preventDefault();
-
-		navigate('/dashboard');
-	}
-
 	const handleCreate = () => {
 		if (clubName == "") {
 			setError(true);
@@ -95,10 +89,6 @@ const CreateClub = props => {
 	return (
 		<Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center',
 			alignItems: 'center', position: 'relative'}}>
-			<p style={{position: 'absolute', top: '2%', left: '2%', cursor: 'pointer', margin: '0 1rem'}} 
-					onClick={handleBack}>
-					Back
-				</p>
 				<Create saveButtonProps={{ onClick: handleCreate}}
 					wrapperProps={{
 						sx: {

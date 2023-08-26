@@ -23,7 +23,14 @@ const WithErrorBoundary = ({ children }) => {
 	}, []);
 
 	if (hasError) {
-		return <h3 style={{color: 'red', fontWeight: 'bold', textAlign: 'center'}}>Oops! Seems like something happened</h3>;
+		return (
+			<div>
+				<h3 style={{color: 'red', fontWeight: 'bold', textAlign: 'center'}}>
+					Oops! Seems like something happened
+				</h3>
+				<h5 style={{textAlign: 'center'}}>REFRESH after a few minutes</h5>
+			</div>
+			);
 	}
 
 	return <>{children}</>;

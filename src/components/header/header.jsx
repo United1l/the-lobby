@@ -22,13 +22,12 @@ const Header = props => {
 	let displaySearch = 'none';
 	let displayAccount = 'none';
 	let iconsTheme = {
-		wrapperBg: 'white',
+		wrapperBg: '#fff',
 		iconBg: 'disabled',
 	}
 
 	let theme = {
-		bg: 'white',
-		textColor: 'black',
+		bg: '#fff',
 	};
 
 	const dark = <DarkModeIcon color={iconsTheme.iconBg} fontSize="small" />;
@@ -63,19 +62,17 @@ const Header = props => {
 
 	if (darkMode) {
 		iconsTheme = {
-			wrapperBg: 'gray',
-			iconBg: 'white',
+			wrapperBg: '#adb5db',
+			iconBg: '#fff',
 		}
-		theme.bg = 'black';
-		theme.textColor = 'white';
+		theme.bg = '#6c757d';
 		themeSwitch = <LightModeIcon color={iconsTheme.iconBg} fontSize="small" />;		
 	} else {
 		iconsTheme = {
-			wrapperBg: 'white',
+			wrapperBg: '#fff',
 			iconBg: 'disabled',
 		}
-		theme.bg = 'white';
-		theme.textColor = 'black';
+		theme.bg = '#fff';
 		themeSwitch = dark;
 	}
 
@@ -89,15 +86,15 @@ const Header = props => {
 
 
 	return (
-		<Box sx={{height: '5%', width: '100%', display: 'flex', borderBottom: '0.5px solid gray', 
+		<Box sx={{height: '5%', width: '100%', display: 'flex', borderBottom: '0.5px solid #adb5db', 
 			 alignItems: 'center'}}>
 			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', 
-			 alignSelf: 'flex-start', ml: '1rem'}}>
+			 alignSelf: 'flex-start', ml: '1rem', mt: '0.29rem'}}>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openMenu} bigScreen={bigScreen}>
 					<MenuIcon color={iconsTheme.iconBg} fontSize="small" />
 				</IconsWrapper>
 			</Box>
-			<Box sx={{position: 'absolute', right: '10px', width: '30%', display: 'flex', alignItems: 'center', 
+			<Box sx={{position: 'absolute', right: '10px', width: '35%', display: 'flex', alignItems: 'center', 
 				justifyContent: 'space-evenly'}}>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={openSearchB}>{searchIcon}</IconsWrapper>
 				<IconsWrapper bgColor={iconsTheme.wrapperBg} cursor="pointer" onClick={handleThemeSwitch}>{themeSwitch}</IconsWrapper>
@@ -107,7 +104,7 @@ const Header = props => {
 						overlap="circular"
 						anchorOrigin={{ vertical: 'bottom', horizontal: 'right'}}
 						badgeContent={
-							<SettingsIcon color={iconsTheme.iconBg} sx={{fontSize: '16px'}} />
+							<SettingsIcon color="primary" sx={{fontSize: '16px'}} />
 						}
 						onClick={openAccSett}
 					>

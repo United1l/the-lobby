@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useOne, useDelete } from "@refinedev/core"; 
 import { ThemedTitleV2 } from "@refinedev/mui";
 import { Box, Paper } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const UserProfile = props => {
 	const navigate = useNavigate();
@@ -52,33 +53,31 @@ const UserProfile = props => {
 	return (
 		<Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center',
 			alignItems: 'center', position: 'relative'}}>
-			<p style={{position: 'absolute', top: '2%', left: '2%', cursor: 'pointer', margin: '0 1rem'}} 
-					onClick={handleBack}>
-					Back
-				</p>
-			<Paper sx={{width: '60%', height: '60%', display: 'flex', flexDirection: 'column', 
+			<ArrowBackIcon onClick={handleBack} sx={{position: 'absolute', top: '2%', left: '2%', cursor: 'pointer', 
+				margin: '0 1rem'}} size="small" color="secondary" />	
+			<Paper sx={{width: '70%', height: '60%', display: 'flex', flexDirection: 'column', 
 			justifyContent: 'center', alignItems: 'center', p: '1rem'}}>
 				<ThemedTitleV2
 					collapsed={false}
 					text="The Lobby"
 				/>
 				<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mb: mb}}>
-					<h4 style={{margin: '0.3rem'}}>Username</h4>	
-					<p style={{margin: '0.2rem'}}>{userData?.user_name}</p>
+					<h3 style={{margin: '0.3rem'}}>Username</h3>	
+					<h5 style={{margin: '0.2rem'}}>{userData?.user_name}</h5>
 				</Box>		
 				<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mb: mb}}>
-					<h4 style={{margin: '0.3rem'}}>Email</h4>	
-					<p style={{margin: '0.2rem'}}>{userData?.user_email}</p>
+					<h3 style={{margin: '0.3rem'}}>Email</h3>	
+					<h5 style={{margin: '0.2rem'}}>{userData?.user_email}</h5>
 				</Box>
 				<Box sx={{width: '70%', height: '30%', display: 'flex', flexDirection: 'column',
 					alignItems: 'center', mb: mb}}>
-					<h4 style={{margin: '0.3rem'}}>Clubs</h4>
-					{userClubs?.map(club => <p style={{margin: '0.2rem'}} key={club}>{club}</p>)}
+					<h3 style={{margin: '0.3rem'}}>Clubs</h3>
+					{userClubs?.map(club => <h5 style={{margin: '0.2rem'}} key={club}>{club}</h5>)}
 				</Box>
 				<Box sx={{width: '70%', height: '30%', display: 'flex', flexDirection: 'column',
 					alignItems: 'center', mb: mb}}>
-					<h4 style={{margin: '0.3rem'}}>Games</h4>
-					{userGames?.map(game => <p style={{margin: '0.2rem'}} key={game}>{game}</p>)}
+					<h3 style={{margin: '0.3rem'}}>Games</h3>
+					{userGames?.map(game => <h5 style={{margin: '0.2rem'}} key={game}>{game}</h5>)}
 				</Box>
 				<p onClick={handleUpdate} style={{color: 'blue', cursor: 'pointer', marginBottom: '0.5rem'}}>Update Password</p>
 				<p onClick={handleDelete} style={{color: 'red', cursor: 'pointer'}}>Delete account</p>								

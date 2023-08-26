@@ -8,7 +8,7 @@ const IconsWrapper = props => {
 
 	return (
 		<Box sx={{height: '30px', width: '32px', display: def, alignItems: 'center', backgroundColor: props.bgColor, 
-			justifyContent: 'center', border: '1px solid gray', borderRadius: '6px', cursor: props.cursor,}}
+			justifyContent: 'center', border: '1px solid #adb5db', borderRadius: '6px', cursor: props.cursor,}}
 			onClick={props.onClick}>
 			{props.children}
 		</Box>

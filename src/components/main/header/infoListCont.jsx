@@ -24,7 +24,7 @@ const InfoListCont = props => {
 		"Hack and Slash", "Lifestyle", "Other"];
 
 	let isMem = title == "Club members";
-	let renderedVals = value.map(val => {
+	let renderedVals = value?.map(val => {
 		return <p style={{margin: '0'}} key={val}>{val}</p>
 	});
 
@@ -41,7 +41,7 @@ const InfoListCont = props => {
 	}
 
 	if (isAd && isMem) {
-		renderedVals = value.map(val => {
+		renderedVals = value?.map(val => {
 			return (
 				<FormControlLabel control={<Checkbox name={val} 
 					checked={checkedState.checkedItems.get(name)} onChange={handleChange} />} 
@@ -52,7 +52,7 @@ const InfoListCont = props => {
 		renderedVals = gameGenres.map(genre => {
 			let checked = checkedState.checkedItems.get(name);
 
-			value.forEach(val => {
+			value?.forEach(val => {
 				if (val == genre) {
 					checked = checkedState.checked;
 				}
@@ -78,45 +78,43 @@ const InfoListCont = props => {
 		for (let i = 0; i < removedUsers.length; i++) {
 			newClubMem = value.filter(val => val != removedUsers[i]);
 		}
+		
+		users.forEach(user => {
+			const { id, user_name } = user;
 
-		for (let i = 0; i < removedUsers.length; i++) {
-			users.forEach(user => {
-				const { id, user_name } = user;
-
-				if (user_name == removedUsers[i]) {
-					const newGameClub = array.userClubs.filter(club => club != clubName);
-
-					mutate({
-						resource: "USER_ACCOUNTS",
-						values: {
-							game_club: newGameClub,
-						},
-						id,
-					});
-				}
-			});
-
-			if (removedUsers[i] == clubAdmin) {
-				const newAdmin = newClubMem[Math.floor(Math.random() * newClubMem.length - 1)];
+			if (removedUsers.includes(user_name)) {
+				const newGameClub = array.userClubs.filter(club => club != clubName);
 
 				mutate({
-					resource: "GAME_CLUBS",
+					resource: "USER_ACCOUNTS",
 					values: {
-						club_admin: newAdmin,
+						game_club: newGameClub,
 					},
-					id: clubId,
+					id,
 				});
-			} 
-		}
+			}
+		});
 
 		mutate({
+			resource: "GAME_CLUBS",
+			values: {
+				club_members: newClubMem,
+				removed_users: removedUsers,
+			},
+			id: clubId,
+		});
+
+		if (removedUsers.includes(clubAdmin)) {
+			const newAdmin = newClubMem[Math.floor(Math.random() * newClubMem.length - 1)];
+
+			mutate({
 				resource: "GAME_CLUBS",
 				values: {
-					club_members: newClubMem,
-					removed_users: removedUsers,
+					club_admin: newAdmin,
 				},
 				id: clubId,
 			});
+		}
 
 		setOpenChat({
 			...openChat,
@@ -148,14 +146,14 @@ const InfoListCont = props => {
 
 	return (
 		<BoxCont>
-			<h4 style={{margin: '0'}}>{title}</h4>
+			<h3 style={{margin: '0'}}>{title}</h3>
 			<Box sx={{display: 'flex', flexDirection: 'column',alignItems: 'center',
 				border: '1px solid gray', height: '80%', width: '80%', overflowY: 'scroll', 
 				overflowX: 'hidden', borderRadius: '5px'}}>
 				{renderedVals}
 			</Box>
-			{isAd? isMem? <p style={{cursor: 'pointer'}} onClick={handleRemove}>Remove</p>:
-				<p style={{cursor: 'pointer'}} onClick={handleUpdate}>Update</p>: <></> }
+			{isAd? isMem? <h6 style={{cursor: 'pointer'}} onClick={handleRemove}>Remove</h6>:
+				<h6 style={{cursor: 'pointer'}} onClick={handleUpdate}>Update</h6>: <></> }
 		</BoxCont>
 		);
 }

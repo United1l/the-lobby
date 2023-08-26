@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useUpdate } from "@refinedev/core";
 import { Box, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useArray, useArrayDispatch } from "../../arrayContext.jsx";
 import { useOpenChat, useSetOpenChat } from "../../chatContext.jsx";
 import { BoxCont } from "./boxCont.jsx";
@@ -52,40 +54,41 @@ const InfoCont = props => {
 		users.forEach(user => {
 			const { id, user_name, game_club } = user;
 
-			clubMem.forEach(mem => {
-				if (mem == user_name) {
-					arrayDispatch({
-						type: 'Remove',
-						userClub: prevName,
-						user: array.userClubs,
-						arr: [],
-					});
+			if (clubMem?.includes(user_name)) {
+				arrayDispatch({
+					type: 'Remove',
+					userClub: prevName,
+					user: array.userClubs,
+					arr: [],
+				});
 
-					let newUserClub = [...array.userClubs, clubName];
-					mutate({
-						resource: "USER_ACCOUNT",
-						values: {
-							game_club: newUserClub,
-						},
-						id: id,
-					});
-				}
-			});
-		});
+				let newUserClub = [...array.userClubs, clubName];
+				
+				mutate({
+					resource: "USER_ACCOUNT",
+					values: {
+						game_club: newUserClub,
+					},
+					id: id,
+				});
+			}
 
-		setOpenChat({
-			...openChat,
-			open: false,
+			setOpenChat({
+				...openChat,
+				open: false,
+			});	
 		});
 	}
 
-	const newName = <Box sx={{display: 'flex', alignItems: 'center', height: '100%', width: '100%',
-		justifyContent: 'space-evenly'}}>
-		<p onClick={handleBack}>Back</p>
-		<TextField type="text" label="New name" value={clubName} onChange={handleChange} 
-			size="small" variant="standard" sx={{width: '70%',}} autoFocus />
-		<SendIcon sx={{cursor: 'pointer'}} onClick={handleUpdate} />	
-	</Box>;
+	const newName = 
+			<Box sx={{display: 'flex', alignItems: 'center', height: '100%', width: '100%',
+				justifyContent: 'space-evenly'}}>
+				<ArrowBackIcon onClick={handleBack} size="small" color="secondary" 
+					sx={{cursor: 'pointer'}}  />
+				<TextField type="text" label="New name" value={clubName} onChange={handleChange} 
+				size="small" variant="standard" sx={{width: '70%',}} autoFocus />
+				<SendIcon sx={{cursor: 'pointer'}} onClick={handleUpdate} />	
+			</Box>;	
 
 	return (
 		<BoxCont isClubName={true}>
@@ -94,9 +97,9 @@ const InfoCont = props => {
 				height: '30%', width: '100%'}}>
 				{isAd? editName? newName: <Box sx={{display: 'flex', justifyContent: 'space-evenly',
 					alignItems: 'center', height: '100%', width: '100%'}}>
-					<p >{value}</p>
-					<p style={{cursor: 'pointer'}} onClick={handleEdit}>Edit</p>
-				</Box> : <p>{value}</p>}
+					<h6 >{value}</h6>
+					<EditIcon sx={{cursor: 'pointer'}} onClick={handleEdit} size="small"/>
+				</Box> : <h6>{value}</h6>}
 			</Box>
 		</BoxCont>
 		);

@@ -3,10 +3,10 @@ import {
 } from "@mui/material";
 
 const UserGameDialog = props => {
-	const userGames = props.userGames || [];
+	const userGames = props.userGames;
 	const open = props.open;
 	const setOpenGameD = props.setOpenGameD;
-	const children = userGames.map(game => {
+	const children = userGames?.map(game => {
 		return <h6 key={game}>{game}</h6>;
 	});
 
@@ -19,7 +19,7 @@ const UserGameDialog = props => {
 	return (
 		<Dialog open={open} onClose={handleClose}>
 			<DialogTitle>
-				<h5>Currently playing</h5>
+				<h3>Currently playing</h3>
 			</DialogTitle>
 			<DialogContent>
 				{children}	

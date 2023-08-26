@@ -30,7 +30,7 @@ const ChatSpace = props => {
 
 	return (
 		<Box className="chatSpace" sx={{height: '80%', width: '100%', display: 'flex', flexDirection: 'column',
-			overflowY: 'scroll', overflowX: 'hidden', position: 'relative', p: '1rem'}} 
+			overflowY: 'scroll', overflowX: 'hidden', position: 'relative',}} 
 			onClick={handleClick}>
 			{renderChats}
 		</Box>

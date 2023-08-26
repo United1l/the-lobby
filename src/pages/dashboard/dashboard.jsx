@@ -7,16 +7,19 @@ import { Sidebar } from "../../components/sidebar/sidebar.jsx";
 import { Main } from "../../components/main/main.jsx";
 import { ChatContextProvider, useOpenChat, useSetOpenChat } from "../../components/chatContext.jsx";
 import { RecommendedContextProvider, useOpenRecom, useSetOpenRecom } from "../../components/recommendedContext.jsx";
+import { useColorContext } from "../../contexts/color-mode/colorContext.jsx";
 
 const Dashboard = props => {
 	const [userId, setUserId] = useState(0);
 	const [menu, setMenu] = useState(false);
-	const [darkMode, setDarkMode] = useState(false);
+	const darkMode = props.darkMode;
+	const setDarkMode = props.setDarkMode;
 	const [matches, setMatches] = useState(
 		window.matchMedia("(min-width: 768px)").matches
 		);
 	const [openUserD, setUserD] = useState(true);			
-
+	const colorContext = useColorContext();
+	const primary = colorContext.primary;
 	let display = 'none';
 	let theme = {
 		bg: 'white',
@@ -47,24 +50,23 @@ const Dashboard = props => {
 		
 	userAcc = getUser(userId);
 
-	const noClubs = userAcc.game_club == null;
-	const isUsername = userAcc.user_name || false;
+	const noClubs = userAcc?.game_club == null;
+	const isUsername = userAcc?.user_name || false;
 
 	if (menu) display = 'flex';
 
 	if (darkMode) {
-		theme.bg = 'black';
-		theme.textColor = 'white';
+		theme.bg = '#6c757d';
 	}
 
 	return (
 		<ChatContextProvider>
 			<RecommendedContextProvider def={noClubs}>
 				<Box sx={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', 
-				background: theme.bg, color: theme.textColor, position: 'relative'}} className="dashboard">
+				background: theme.bg, position: 'relative'}} className="dashboard">
 				{!matches && <Box sx={{height: '1.8%', width: '100%', display: 'flex', alignItems: 'center', 
 					justifyContent: 'center', position: 'absolute', top: '0', pb: '2px'}}>
-					<p style={{fontWeight: 'bolder', fontSize: '9px'}}>The Lobby</p>	
+					<p style={{fontWeight: 'bolder', fontSize: '9px', color: primary}}>The Lobby</p>	
 				</Box>}
 				<Header menu={menu} setMenu={setMenu} darkMode={darkMode} setDarkMode={setDarkMode} 
 					bigScreen={matches} />
@@ -82,7 +84,7 @@ const Dashboard = props => {
 }
 
 const getUser = userId => {
-	const { data, isLoading, isError} = useOne({
+	const { data, isLoading } = useOne({
 		resource: "USER_ACCOUNT",
 		id: userId,
 	});
@@ -91,10 +93,6 @@ const getUser = userId => {
 
 	if (isLoading) {
 		return <div>Loading...</div>
-	}
-
-	if (isError) {
-		return <div>Something went wrong</div>
 	}
 
 	return user;

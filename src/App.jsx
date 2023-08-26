@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Authenticated, GitHubBanner, Refine, } from "@refinedev/core";
+import { Authenticated, Refine, } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
 import {
   ThemedLayoutV2,
   ErrorComponent,
@@ -10,6 +9,7 @@ import {
 } from "@refinedev/mui";
 
 import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import routerBindings, {
   CatchAllNavigate,
@@ -32,14 +32,31 @@ import { UserProfile } from "./pages/user-profile-sett/profile.jsx";
 import { Dashboard } from "./pages/dashboard/dashboard.jsx";
 import { WithErrorBoundary } from "./components/withErrorBoundary.jsx";
 import { ArrayContextProvider } from "./components/arrayContext.jsx";
+import { ColorContextProvider } from "./contexts/color-mode/colorContext.jsx";
 import { supabaseClient } from "./utility";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const { palette } = createTheme();
+  const { augmentColor } = palette;
+  const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
+  const theme = createTheme({
+    palette: {
+      primary: createColor('#ff725e'),
+      secondary: createColor('#adb5bd'),
+      white: createColor('#fff'),
+    },
+  });
+
   return (
      <BrowserRouter>
       <RefineSnackbarProvider>
         <CssBaseline />
-        <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
+        <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" }, h1: { fontSize: 'clamp(40px, 2vw, 80px)'},
+            h3: { fontSize: 'clamp(15px, 1.5vw, 30px)', color: '#343a40'}, 
+            h5: {fontSize: 'clamp(14px, 1vw, 28px)', color: darkMode? '#fff': '#6c757d'},
+            h6: {fontSize: 'clamp(13px, 1vw, 26px)', color: '#6c757d'},
+             }} />
           <Refine routerProvider={routerBindings}
           dataProvider={dataProvider(supabaseClient)}
           resources={[
@@ -55,6 +72,8 @@ function App() {
           notificationProvider={notificationProvider}
           authProvider={authProvider}
         >
+        <ThemeProvider theme={theme}>
+         <ColorContextProvider> 
           <ArrayContextProvider>
             <WithErrorBoundary>
               <Routes>
@@ -70,7 +89,9 @@ function App() {
                     </Authenticated>  
                   }
                  >  
-                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="dashboard" element={
+                    <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />} 
+                    />
                   <Route path="preferences" element={<Preferences />} />
                   <Route path="create" element={<CreateClub />} />
                   <Route path="profile" element={<UserProfile />} />
@@ -113,6 +134,8 @@ function App() {
               </Routes>
             </WithErrorBoundary>
           </ArrayContextProvider>
+          </ColorContextProvider>
+          </ThemeProvider>
           <UnsavedChangesNotifier />
         </Refine>
       </RefineSnackbarProvider>
