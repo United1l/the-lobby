@@ -38,8 +38,8 @@ const SetUserName = props => {
 	if (openUserD) disp = "flex";
 
 	return (
-		<Paper sx={{height: '50%', width: '45%', display: disp, justifyContent: 'center', alignItems: 'center', 
-			position: 'absolute', top: '20%', right: '20%', p: '1rem'}}>
+		<Paper sx={{height: '60%', width: '45%', display: disp, justifyContent: 'center', alignItems: 'center', 
+			position: 'absolute', top: '20%', right: '25%', p: '1rem'}}>
 			<Box sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}>
 				<ThemedTitleV2
 					collapsed={false}
@@ -50,7 +50,7 @@ const SetUserName = props => {
 					variant="outlined" />
 				<Alert severity="info">
 				<AlertTitle>Info</AlertTitle>
-					Don't reset username if already set <br />
+					Ignore this if username is already set <br />
 					Refresh page if username dialog is still onscreen
 				</Alert>	
 				<Button variant="contained" onClick={handleProceed}>Proceed</Button>
